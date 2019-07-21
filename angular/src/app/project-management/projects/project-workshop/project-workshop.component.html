@@ -1,0 +1,27 @@
+<div class="row" [@routerTransition]>
+  <app-sub-toolbar>
+    <h4>布局选择 <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+    <div>
+      <button mat-icon-button color="default" (click)="refresh();">
+        <mat-icon aria-label="刷新" matTooltip="刷新">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <div class="form-container">
+    <div class="row">
+      <div class="col-sm-12">
+        <app-project-autocomplete (onOptionSelected)="project=$event"></app-project-autocomplete>
+      </div>
+      <div class="crosswise-layout col-sm-6 m-t-15 m-b-15" *ngFor="let item of layoutItems">
+        <mat-card class="layout-content clear-margin" matRipple (click)="changeLayout(item)">
+          <div class="headers clearfix">
+            {{item.layoutName}}
+            <i class="check-icon material-icons" matTooltip="此布局已选择" aria-label="此布局已选择"
+               *ngIf="project && item.id == project.layoutId">check_circle</i>
+          </div>
+          <img alt="布局图片" mat-card-image [src]="item.image" class="crosswise-content">
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</div>

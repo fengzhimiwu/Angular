@@ -1,0 +1,67 @@
+<div class="row clearfix" [@routerTransition]>
+  <app-sub-toolbar>
+    <div><i class="material-icons arrow-back" matRipple routerLink="../"></i>项目详情与Bim模型</div>
+    <div>
+      <button mat-icon-button color="default" (click)="save()" [disabled]="saving">
+        <mat-icon aria-label="保存" matTooltip="保存">check</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <mat-tab-group dynamicHeight>
+    <mat-tab label="项目详情">
+      <ng-template matTabContent>
+        <div class="form-container">
+          <form novalidate class="row" *ngIf="project">
+            <div class="col-sm-12 m-b-15">
+              <app-bim-viewer [project]="project" [height]="'400px'"></app-bim-viewer>
+            </div>
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline">
+                <mat-label>项目名称</mat-label>
+                <input matInput placeholder="输入项目名称" [(ngModel)]="project.name" name="projectName">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-3">
+              <app-setting-selector [(value)]="project.category" key="项目类别" settingType="system" appearance="outline">
+              </app-setting-selector>
+            </div>
+            <div class="col-sm-3">
+              <mat-form-field appearance="outline">
+                <mat-label>梁场名称</mat-label>
+                <input matInput placeholder="输入梁场名称" [(ngModel)]="project.siteName" name="siteName">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline">
+                <mat-label>建设单位</mat-label>
+                <input matInput placeholder="输入建设单位" [(ngModel)]="project.unitName" name="unitName">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-6">
+              <mat-form-field appearance="outline">
+                <mat-label>监理单位</mat-label>
+                <input matInput placeholder="输入监理单位" [(ngModel)]="project.supervisor" name="supervisor">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12">
+              <mat-form-field appearance="outline">
+                <mat-label>项目简介</mat-label>
+                <textarea matInput placeholder="输入项目简介" [(ngModel)]="project.profile" name="profile"></textarea>
+              </mat-form-field>
+            </div>
+          </form>
+        </div>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="项目文件">
+      <ng-template matTabContent>
+        <app-project-files *ngIf="project" [project]="project"></app-project-files>
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="项目视频">
+      <ng-template matTabContent>
+        <app-project-video *ngIf="project" [project]="project"></app-project-video>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

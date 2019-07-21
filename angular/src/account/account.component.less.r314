@@ -1,0 +1,34 @@
+﻿/*登录框后面的粒子背景*/
+#particles-js {
+  position: absolute;
+  display: flex;
+  width: 100%;
+  height: 100%;
+}
+mat-card {
+  padding: 32px;
+}
+.login-box {
+  max-width: 480px;
+  /*max-height: 540px;*/
+  /* overflow-x: hidden; */
+  margin: auto;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+@media (max-width: 767px) {
+  .mobile-login-card {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    border-radius: 0;
+  }
+}

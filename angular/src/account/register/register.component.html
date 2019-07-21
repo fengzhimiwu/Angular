@@ -1,0 +1,51 @@
+﻿<div [@routerTransition]>
+  <form #registerForm="ngForm" (ngSubmit)="save()">
+    <h4 class="text-center m-b-25" style="font-size: 21px;">{{l("用户注册")}}</h4>
+    <mat-form-field appearance="outline">
+      <mat-label>邀请码</mat-label>
+      <input matInput placeholder="请输入邀请码" type="text" [(ngModel)]="model.invitationCode" name="invitationCode"
+             required maxlength="128">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>姓名</mat-label>
+      <input matInput placeholder="请输入姓名" autoFocus type="text" [(ngModel)]="model.name" name="Name"
+             required maxlength="32">
+    </mat-form-field>
+    <!--<mat-form-field appearance="outline">
+      <mat-label>称谓</mat-label>
+      <input matInput placeholder="请输入称谓" type="text" [(ngModel)]="model.surname" name="Surname"
+             required maxlength="32" autocomplete="off">
+    </mat-form-field>-->
+    <!--<mat-form-field appearance="outline">-->
+      <!--<mat-label>电子邮件</mat-label>-->
+      <!--<input matInput placeholder="请输入电子邮件" type="email" [(ngModel)]="model.emailAddress" name="EmailAddress"-->
+             <!--required maxlength="255" pattern="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$">-->
+    <!--</mat-form-field>-->
+    <mat-form-field appearance="outline">
+      <mat-label>手机号</mat-label>
+      <input matInput placeholder="请输入手机号" type="number" [(ngModel)]="model.mobileNumber" name="MobileNumber"
+             required maxlength="32" >
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>登录名(用户名)</mat-label>
+      <input matInput placeholder="请输入登录名(用户名)" type="text" [(ngModel)]="model.userName" name="UserName"
+             required maxlength="32" autocomplete="off" >
+      <mat-icon matSuffix>person</mat-icon>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>密码</mat-label>
+      <input matInput placeholder="请输入密码" type="password" [(ngModel)]="model.password" name="Password"
+             required maxlength="32">
+      <mat-icon matSuffix>lock</mat-icon>
+    </mat-form-field>
+    <div class="row m-t-15">
+      <div class="col-xs-6">
+        <button mat-button color="primary" type="button" [disabled]="saving" [routerLink]="['../login']">返回
+        </button>
+      </div>
+      <div class="col-xs-6 align-right">
+        <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.form.valid || saving">确认注册</button>
+      </div>
+    </div>
+  </form>
+</div>

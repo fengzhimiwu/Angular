@@ -1,0 +1,124 @@
+<div class="row" [@routerTransition]>
+  <app-sub-toolbar>
+    <h4>台座分派 <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+    <div>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="定位" matTooltip="自动定位一个构件" (click)="autoSelectOne()">my_location</mat-icon>
+      </button>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <mat-card>
+    <div class="row">
+      <div class="col-sm-4">
+        <app-project-autocomplete (onOptionSelected)="onProjectSelected($event)"></app-project-autocomplete>
+      </div>
+      <div class="col-sm-4">
+        <label>选择需要显示的构件（未加入计划的不会显示）</label><br>
+        <mat-radio-group [(ngModel)]="dbIdType" (change)="dbIdTypeChange($event.value)">
+          <mat-radio-button [value]="0">全部</mat-radio-button>
+          <mat-radio-button [value]="1">待操作</mat-radio-button>
+          <mat-radio-button [value]="2">正在进行</mat-radio-button>
+          <mat-radio-button [value]="3">已完成</mat-radio-button>
+        </mat-radio-group>
+<!--        <mat-slide-toggle [(ngModel)]="isFinished" (change)="refresh()">显示已完成</mat-slide-toggle><br>-->
+<!--        <mat-slide-toggle>隐藏无法操作的BIM构件</mat-slide-toggle><br>-->
+      </div>
+      <div class="col-sm-4">
+        <mat-chip-list [selectable]="true">
+          <mat-chip *ngIf="subProjectSelected" class="clickable-item" (click)="openSubLogPreviewDialog()">
+            构件：{{subProjectSelected.code}}
+          </mat-chip>
+          <mat-chip *ngIf="pedestalSelected">台座：{{pedestalSelected.code}}</mat-chip>
+        </mat-chip-list>
+      </div>
+    </div>
+  </mat-card>
+  <mat-vertical-stepper [linear]="false" #stepper>
+    <mat-step>
+      <ng-template matStepLabel>选择构件
+        <button mat-button (click)="isListShown=false">查看模型</button>
+        <button mat-button (click)="isListShown=true">查看列表</button>
+      </ng-template>
+      <div class="row">
+        <div class="col-sm-12" [ngClass]="{hidden: isListShown}">
+          <!--模型部分-->
+          <app-bim-viewer (onSelectionChange)="onSubProjectSelect($event)" [height]="'400px'" #bimViewer
+                          [project]="project" *ngIf="!!project else elseTip"></app-bim-viewer>
+          <ng-template #elseTip>
+            <div class="empty-state"><mat-icon class="m-r-10">mood</mat-icon>请先选择项目</div>
+          </ng-template>
+        </div>
+        <div class="col-sm-12" [ngClass]="{hidden: !isListShown}">
+        <!--表格部分-->
+          <div class="table-responsive">
+            <table class="table table-hover dashboard-task-infos">
+              <thead>
+              <tr>
+                <th>构件颜色：</th>
+                <th colspan="6">
+                  <span class="label bg-purple">待分台座</span>
+                  <span class="label bg-blue">待分派任务</span>
+                  <span class="label bg-orange">处理中</span>
+                  <span class="label bg-green">完成</span>
+                </th>
+              </tr>
+              <tr>
+                <th></th>
+                <th>梁片编号</th>
+                <th>bim模型编号</th>
+                <th>计划完成时间</th>
+                <th>状态</th>
+                <th>进度</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let subProject of subProjects | paginate: { id: 'server', itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalItems }"
+                  class="clickable-item" (click)="subProjectSelected=subProject">
+                <td><i class="material-icons" *ngIf="subProjectSelected==subProject">check</i></td>
+                <td>{{subProject.code}}</td>
+                <td>{{subProject.bimModelDbId}}</td>
+                <td>{{subProject.estimatedFinishedTime | date}}</td>
+                <td><span class="label" [ngClass]="subProject.bgClass">{{subProject.stageCode}}</span></td>
+                <td>
+                  <mat-progress-bar mode="determinate" [value]="subProject.progress" style="height: 10px"></mat-progress-bar>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="sys-ngx-pagination" *ngIf="totalItems > pageSize">
+            <pagination-controls (pageChange)="showPaging({totalCount:totalItems,items:null}, $event)" id="server" nextLabel="下一页"
+                                 previousLabel="上一页"></pagination-controls>
+          </div>
+        </div>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>选择台座</ng-template>
+      <div class="row">
+        <div class="col-sm-12">
+          <app-workshop-display #workshop [(selection)]="pedestalSelected" (selectionChange)="pedestalChange($event)" [project]="project"
+                                *ngIf="project else elseTip"></app-workshop-display>
+          <ng-template #elseTip>
+            <div class="empty-state"><mat-icon class="m-r-10">mood</mat-icon>请先选择项目</div>
+          </ng-template>
+        </div>
+      </div>
+    </mat-step>
+  </mat-vertical-stepper>
+  <app-button-group>
+    <!--<button mat-fab color="default" [disabled]="!subProjectSelected" *ngIf="!pedestalSelected" (click)="stepper.next()">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+    <button mat-fab color="default" *ngIf="!subProjectSelected && pedestalSelected" (click)="stepper.previous()">
+      <mat-icon>chevron_left</mat-icon>
+    </button>-->
+    <button mat-fab color="primary" (click)="bindPedestal()"
+            [disabled]="!subProjectSelected || !pedestalSelected"><mat-icon>check</mat-icon>
+    </button>
+  </app-button-group>
+</div>
+

@@ -1,0 +1,14 @@
+label {
+   font-weight: normal !important;
+  font-size: 12px;
+}
+::ng-deep div.mat-radio-label-content {
+  font-weight: normal !important;
+  font-size: 12px;
+}
+mat-radio-button {
+  margin-right: 8px;
+}
+::ng-deep .mat-vertical-content {
+  padding-bottom: 0 !important;;
+}

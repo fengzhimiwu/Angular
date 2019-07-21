@@ -1,0 +1,84 @@
+<div class="scrollBox" [ngClass]="{'mask': selection!=undefined}" (click)="choosePedestal(undefined, $event)">
+  <!--横向布局，加载动画-->
+  <div class="loadingBox" *ngIf="loading">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+  <!--提示-->
+  <div style="text-align: center" *ngIf="!generateOutputs && !loading">
+    此项目还未选定台座布局...
+  </div>
+  <!--对服务器取来的数据进行布局的操作-->
+  <div class="row clearfix" *ngFor="let items of generateOutputs">
+    <div class="leftContent col-sm-6">
+      <div class="working-area col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <div class="headers">存梁台</div>
+        <div class="content">
+            <span (click)="choosePedestal(item, $event)" [ngClass]="{'selected':item?.id === selection?.id}" matRipple
+                  *ngFor="let item of items.lU_SaveBeam" class="chunk {{item.className}}">{{item.displayNo}}</span>
+        </div>
+      </div>
+      <div class="working-area col-lg-4 col-md-4 col-sm-4 col-xs-4">
+        <div class="headers">制梁台</div>
+        <div class="content">
+            <span (click)="choosePedestal(item, $event)" [ngClass]="{'selected':item?.id === selection?.id}" matRipple
+                  *ngFor="let item of items.lU_BeamPedestal" class="chunk {{item.className}}">{{item.displayNo}}</span>
+        </div>
+      </div>
+      <div class="working-area col-lg-2 col-md-2 col-sm-2 col-xs-2">
+        <div class="headers">绑扎台</div>
+        <div class="content">
+            <span (click)="choosePedestal(item, $event)" [ngClass]="{'selected':item?.id === selection?.id}" matRipple
+                  *ngFor="let item of items.lU_BindRebar" class="chunk {{item.className}}">{{item.displayNo}}</span>
+        </div>
+      </div>
+    </div>
+    <div class="rightContent col-sm-6">
+      <div class="working-area col-lg-2 col-md-2 col-sm-2 col-xs-2">
+        <div class="headers" matBadge="{{items.productionLine}}" matBadgePosition="below before" matBadgeColor="accent"
+             matBadgeSize="small">绑扎台
+        </div>
+        <div class="content">
+            <span (click)="choosePedestal(item, $event)" [ngClass]="{'selected':item?.id === selection?.id}" matRipple
+                  *ngFor="let item of items.rD_BindRebar" class="chunk {{item.className}}">{{item.displayNo}}</span>
+        </div>
+      </div>
+      <div class="working-area col-lg-4 col-md-4 col-sm-4 col-xs-4">
+        <div class="headers">制梁台</div>
+        <div class="content">
+            <span (click)="choosePedestal(item, $event)" [ngClass]="{'selected':item?.id === selection?.id}" matRipple
+                  *ngFor="let item of items.rD_BeamPedestal" class="chunk {{item.className}}">{{item.displayNo}}</span>
+        </div>
+      </div>
+      <div class="working-area col-lg-6 col-md-6 col-sm-6 col-xs-6">
+        <div class="headers">存梁台</div>
+        <div class="content">
+            <span (click)="choosePedestal(item, $event)" [ngClass]="{'selected':item?.id === selection?.id}" matRipple
+                  *ngFor="let item of items.rD_SaveBeam" class="chunk {{item.className}}">{{item.displayNo}}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--台座标签提示部分-->
+  <div class="row clearfix">
+    <div class="col-sm-12">
+      <hr>
+    </div>
+    <div class="col-sm-12" style="display: flex;">
+      <span class="with-icon-text-container">
+        <span class="chunk"></span> 空闲
+      </span>
+      <span class="with-icon-text-container">
+        <span class="chunk in-processing"></span> 进行中
+      </span>
+      <span class="with-icon-text-container">
+        <span class="chunk wait-assignment"></span> 等待任务分派
+      </span>
+      <span class="with-icon-text-container">
+        <span class="chunk wait-workshop"></span> 等待分配新台座
+      </span>
+      <span class="with-icon-text-container">
+        <span class="chunk in-completing"></span> 成品
+      </span>
+    </div>
+  </div>
+</div>

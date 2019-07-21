@@ -1,0 +1,16 @@
+<mat-form-field appearance="standard">
+  <mat-label>选择工序模板</mat-label>
+  <input matInput type="text" placeholder="选择工序模板" [matAutocomplete]="autoProcedure"
+         [formControl]="searchProcedureControl">
+  <!-- <mat-hint align="start">选择工序模板后，才会选中相应模板</mat-hint> -->
+  <!--清除按钮-->
+  <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="searchProcedureControl.setValue('')">
+    <mat-icon>close</mat-icon>
+  </button>
+  <!--下拉框部分-->
+  <mat-autocomplete #autoProcedure="matAutocomplete" (optionSelected)="optionSelected($event.option)">
+    <mat-option *ngFor="let option of filteredProcedureOptions | async" [value]="option">
+      {{option.name}}
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

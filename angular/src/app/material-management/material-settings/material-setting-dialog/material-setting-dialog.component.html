@@ -1,0 +1,29 @@
+<h1 mat-dialog-title>
+  <ng-container *ngIf="data.materialId">{{data.key}}参数修改</ng-container>
+  <ng-container *ngIf="!data.materialId">创建{{data.key}}新参数</ng-container>
+</h1>
+<form #materialForm="ngForm" (ngSubmit)="save()">
+  <mat-dialog-content>
+    <mat-form-field appearance="standard">
+      <mat-label>{{data.key}}参数类别</mat-label>
+      <input matInput placeholder="请输入参数类别" [(ngModel)]="material.key" name="key" required [disabled]="true">
+    </mat-form-field>
+    <!-- <mat-form-field appearance="standard">
+      <mat-label>材料显示关键字</mat-label>
+      <input matInput placeholder="请输入材料显示关键字" [(ngModel)]="material.displayKey" name="displayKey" >
+    </mat-form-field> -->
+    <mat-form-field appearance="standard">
+      <mat-label>{{data.key}}的值</mat-label>
+      <input matInput placeholder="请输入{{data.key}}的值" [(ngModel)]="material.value" name="value" required>
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>{{data.key}}的描述</mat-label>
+      <input matInput placeholder="请输入{{data.key}}的描述" [(ngModel)]="material.description" name="description">
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button type="button" mat-button mat-dialog-close>取消</button>
+    <button type="submit" mat-button color="primary" [disabled]="materialForm.invalid">确定</button>
+  </mat-dialog-actions>
+</form>
+

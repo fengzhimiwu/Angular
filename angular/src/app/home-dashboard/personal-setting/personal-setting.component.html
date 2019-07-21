@@ -1,0 +1,67 @@
+<div class="row clearfix" [@routerTransition]>
+  <app-sub-toolbar>
+    <h4>个人信息设置/修改密码</h4>
+    <div>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="刷新" matTooltip="刷新" (click)="ngOnInit()">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <mat-tab-group><!--dynamicHeight-->
+    <mat-tab label="个人信息">
+      <form (ngSubmit)="savePersonalInfo()" #personInfo="ngForm" class="form-container" *ngIf="user">
+        <div class="row">
+          <div class="col-sm-6 user-head-info-box">
+            <input type="file" #headFile style="display: none" (change)="headFileInput($event)">
+            <app-user-head-viewer [user]="user" size="middle"></app-user-head-viewer>
+            <app-user-head-viewer [user]="user" size="small"></app-user-head-viewer>
+            <div class="left-area">
+              <button mat-icon-button type="button" (click)="headFile.click()" matTooltip="修改头像">
+                <mat-icon>edit</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <mat-form-field appearance="outline">
+              <mat-label>姓名</mat-label>
+              <input matInput placeholder="请输入姓名" [(ngModel)]="user.name" name="name" required>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-6">
+            <mat-form-field appearance="outline">
+              <mat-label>手机号</mat-label>
+              <input matInput placeholder="请输入手机号" [(ngModel)]="user.mobileNumber" name="mobileNumber" required>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-6">
+            <mat-form-field appearance="outline">
+              <mat-label>邮箱</mat-label>
+              <input matInput placeholder="请输入邮箱" [(ngModel)]="user.emailAddress" name="emailAddress">
+            </mat-form-field>
+          </div>
+        </div>
+        <app-button-group>
+          <button mat-fab color="primary" type="submit" [disabled]="!personInfo.form.valid">
+            <mat-icon>check</mat-icon>
+          </button>
+        </app-button-group>
+      </form>
+    </mat-tab>
+    <mat-tab label="修改密码">
+      <app-personal-password-setting></app-personal-password-setting>
+    </mat-tab>
+    <mat-tab label="其他配置">
+      <app-personal-other-settings></app-personal-other-settings>
+    </mat-tab>
+    <mat-tab label="皮肤设置">
+      <ul class="demo-choose-skin form-container">
+        <li *ngFor="let theme of themes" [ngClass]="{'active': selectedThemeCssClass == theme.cssClass}"
+            (click)="setTheme(theme)">
+          <div class="{{theme.cssClass}}"></div>
+          <span>{{theme.name}}</span>
+        </li>
+      </ul>
+    </mat-tab>
+  </mat-tab-group>
+  <!-- #END# Task Info -->
+</div>

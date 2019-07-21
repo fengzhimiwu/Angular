@@ -1,0 +1,78 @@
+/* 上下居中样式*/
+.flex-column-center {
+  display: flex;
+  align-items: center;
+  transition: all 500ms ease;
+  position: relative;
+}
+/* link bar 的样式*/
+.flex-column-center:before {
+  height: 0;
+  content: '';
+  transition: all 500ms ease;
+  background-color: #ffffff;
+}
+.active:before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  transition: all 500ms ease;
+  background-color: #ffffff;
+}
+/*navbar样式*/
+.navbar-nav > li > a {
+  margin: 0;
+  padding: 0 32px;
+  display: flex;
+  align-items: center;
+  transition: all 500ms ease;
+  color: #b6b6b6;
+}.navbar-nav > li > a.active {
+  color: #fff;
+}
+.navbar-nav > li {
+  display: flex;
+  align-items: stretch;
+}
+.navbar-nav {
+  height: 64px;
+  display: flex;
+  align-items: stretch;
+  flex-flow: nowrap;
+}
+/*固定横向显示*/
+.navbar .space-between-container {
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  transition: all 0.33s ease;
+}
+.navbar-header > .bars:before, .navbar-header > .bars:after{
+  top: 14px;
+}
+.navbar-header {
+  padding: 7px;
+}
+/*当宽度变小的时候特殊样式*/
+@media (max-width: 767px) {
+  .navbar-nav {
+    margin: 0;
+  }
+  /*navbar元素样式*/
+  .navbar-nav > li > a {
+    padding: 0 12px;
+  }
+  .navbar-header {
+    width: 40px;
+  }
+  /*删除头，适配手机*/
+  .navbar-header .navbar-brand {
+    display: none;
+  }
+  .container-fluid {
+    padding: 0 8px;
+  }
+}

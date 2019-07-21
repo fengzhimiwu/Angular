@@ -1,0 +1,60 @@
+<div class="row" [@routerTransition]>
+  <app-sub-toolbar>
+    <h4>任务分派 <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+    <div>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <mat-card>
+    <div class="row">
+      <div class="col-sm-6">
+        <app-project-autocomplete (onOptionSelected)="project=$event;refresh()"></app-project-autocomplete>
+      </div>
+      <div class="col-sm-6">
+        <mat-form-field appearance="standard">
+          <mat-label>日常任务类别</mat-label>
+          <mat-select placeholder="请选择日常任务类别" (selectionChange)="getRoutineTasks($event.value)">
+            <mat-option *ngFor="let item of procedureSteps" [value]="item">
+              {{item.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card>
+  <div class="table-responsive">
+    <table class="table table-hover clear-margin">
+      <tr>
+        <th></th>
+        <th>任务名称</th>
+        <th>排序号</th>
+      </tr>
+      <tr *ngIf="!psTis">
+        <td colspan="4">请选择日常类别进行查看</td>
+      </tr>
+      <tr *ngFor="let item of psTis">
+        <td>
+          <mat-checkbox (change)="selectTaskItemCheckbox($event.checked, item)"></mat-checkbox>
+        </td>
+        <td>{{item.taskItem.name}}</td>
+        <td>{{item.sortId}}</td>
+      </tr>
+    </table>
+  </div>
+  <mat-card *ngIf="project">
+    <div class="row">
+      <div class="col-sm-12">
+        <app-workshop-display (selectionChange)="onChooseWorkshop($event)" *ngIf="project" #workshop
+                              [project]="project"></app-workshop-display>
+      </div>
+    </div>
+  </mat-card>
+  <app-button-group>
+    <button mat-fab color="primary" class="pull-right" (click)="assignTask()" [disabled]="selections.length < 1">
+      <mat-icon>forward</mat-icon>
+    </button>
+  </app-button-group>
+</div>
+

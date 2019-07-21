@@ -1,0 +1,59 @@
+<div bsModal #editModal="bs-modal" class="modal fade" (onShown)="onShown()" tabindex="-1" role="dialog"
+     aria-labelledby="editTaskItemModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+
+    <div #modalContent class="modal-content">
+
+      <form *ngIf="active" #editForm="ngForm" id="frm_edit_taskItem" novalidate (ngSubmit)="save()">
+
+        <div class="modal-header">
+          <button type="button" class="close" (click)="close()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">
+            <span>{{l("创建新工作项")}}</span>
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div class="row clearfix">
+            <div class="col-sm-12">
+              <div class="form-group form-float">
+                <div class="form-line">
+                  <input id="taskItemName" type="text" name="TaskItemName" [(ngModel)]="model.name" required
+                         maxlength="64" minlength="2" class="validate form-control">
+                  <label for="taskItemName" class="form-label">{{l("工作项名称")}}</label>                
+                </div>
+              </div>
+            </div> 
+            
+          </div>
+          <div class="row clearfix">            
+            <div class="col-sm-12">
+              <div class="form-group form-float">
+                <div class="form-line">                 
+                  <input id="taskItemRemark" type="text" name="taskItemRemark" [(ngModel)]="model.remark"
+                  maxlength="128" minlength="2" class="validate form-control">
+                  <label for="taskItemRemark" class="form-label">{{l("描述")}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-sm-12">
+              <div class="form-group">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button [disabled]="saving" type="button" mat-button (click)="close()">
+            {{l("取消")}}
+          </button>
+          <button [disabled]="!editForm.form.valid || saving" type="submit" mat-button color="primary">
+            {{l("保存")}}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+<div class="row clearfix" [@routerTransition]>
+  <app-sub-toolbar>
+    <h4> {{l('工序模板列表')}} <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+    <div>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>{{l('工序模板名称')}}</th>
+        <th>{{l('总天数')}}</th>
+        <th>{{l('工序个数')}}</th>
+        <th>{{l('操作')}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let procedure of procedures | paginate: { id: 'server', itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalItems }">
+        <td>{{procedure.name}}</td>
+        <td>{{procedure.totalDuration}}</td>
+        <td>{{procedure.lastPriority}}</td>
+        <td>
+          <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item [routerLink]="[{pageNumber: pageNumber}, procedure.id]"><mat-icon>forward</mat-icon>查看详细</button>
+            <button mat-menu-item (click)="editModal.show(procedure.id)"><mat-icon>edit</mat-icon>编辑</button>
+            <button mat-menu-item (click)="delete(procedure)"><mat-icon>delete</mat-icon>删除</button>
+          </mat-menu>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="sys-ngx-pagination" *ngIf="totalItems > pageSize">
+      <pagination-controls (pageChange)="getDataPage($event)" id="server" nextLabel="下一页" previousLabel="上一页">
+      </pagination-controls>
+    </div>
+  </div>
+  <app-button-group>
+    <button mat-fab color="primary" type="button" (click)="editModal.show()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </app-button-group>
+</div>
+
+<app-procedure-modal #editModal (modalSave)="refresh()"></app-procedure-modal>

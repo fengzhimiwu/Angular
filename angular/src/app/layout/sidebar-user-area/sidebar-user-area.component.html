@@ -1,0 +1,28 @@
+<div class="user-info">
+  <app-user-head-viewer size="middle" [user]="appSession.user" class="clickable-item" style="border-radius:50%"
+                        matRipple (click)="gotoPersonalSetting()"></app-user-head-viewer>
+
+  <div class="info-container">
+    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{shownLoginName}}</div>
+    <div class="email">{{appSession.user.emailAddress}}</div>
+    <div class="user-helper-dropdown">
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>keyboard_arrow_down</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <button (click)="logout()" mat-menu-item>
+          <mat-icon>input</mat-icon>
+          <span>退出系统</span>
+        </button>
+        <button mat-menu-item (click)="gotoPersonalSetting()">
+          <mat-icon>create</mat-icon>
+          <span>修改个人信息</span>
+        </button>
+        <button mat-menu-item>
+          <mat-icon>refresh</mat-icon>
+          <span>刷新信息</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</div>

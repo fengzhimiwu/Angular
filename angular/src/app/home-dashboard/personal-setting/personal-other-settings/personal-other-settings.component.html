@@ -1,0 +1,50 @@
+<mat-list>
+  <h3 mat-subheader>向导设置</h3>
+  <mat-list-item>
+    <mat-slide-toggle [(ngModel)]="isEnabledSystemTutorial" (change)="changeSystemTutorial($event)"></mat-slide-toggle>
+    <p matLine>开启系统模块向导</p>
+  </mat-list-item>
+  <h3 mat-subheader>常规配置</h3>
+  <mat-list-item>
+    <h4 matLine>报表面板用法</h4>
+    <!--<p matLine>报表面板用法</p>-->
+    <div class="switch">
+      <label><input type="checkbox" checked><span class="lever"></span></label>
+    </div>
+  </mat-list-item>
+  <mat-list-item>
+    <h4 matLine>Email重定向</h4>
+    <div class="switch">
+      <label><input type="checkbox" checked><span class="lever"></span></label>
+    </div>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <h3 mat-subheader>系统配置</h3>
+  <mat-list-item>
+    <h4 matLine>通知</h4>
+    <div class="switch">
+      <label><input type="checkbox" checked><span class="lever"></span></label>
+    </div>
+  </mat-list-item>
+  <mat-list-item>
+    <h4 matLine>自动更新</h4>
+    <div class="switch">
+      <label><input type="checkbox" checked><span class="lever"></span></label>
+    </div>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+  <h3 mat-subheader>账号配置</h3>
+  <mat-list-item>
+    <h4 matLine>离线</h4>
+    <div class="switch">
+      <label><input type="checkbox" checked><span class="lever"></span></label>
+    </div>
+  </mat-list-item>
+  <mat-list-item>
+    <h4 matLine>定位权限</h4>
+    <div class="switch">
+      <label><input type="checkbox" checked><span class="lever"></span></label>
+    </div>
+  </mat-list-item>
+  <mat-divider></mat-divider>
+</mat-list>

@@ -1,0 +1,35 @@
+﻿<!-- #END# Search Bar -->
+
+<nav class="navbar" [@toolbarAnimation]="stateChanger.states['isToolbarHidden'] ? 'hidden' : 'visible'">
+  <mat-progress-bar mode="indeterminate" style="position: absolute; top: 0;" *ngIf="false"></mat-progress-bar>
+  <div class="container-fluid">
+    <div class="space-between-container">
+      <div class="navbar-header">
+        <a class="bars"></a>
+        <a class="navbar-brand"><i class="fa fa-cubes"></i> 生产管理系统</a>
+      </div>
+      <ul class="nav navbar-nav navbar-right module-nav">
+        <li>
+          <a [routerLink]="'/app/home'" routerLinkActive="active" class="flex-column-center" matRipple
+             data-close="true">
+            <span routerLink="/app/production" style="display: none"></span>
+            <span>{{l("生产")}}</span></a></li>
+        <li *ngIf="ifShowModule('project')">
+          <a [routerLink]="'./project'" routerLinkActive="active" class="flex-column-center" matRipple>
+            <span>{{l("项目")}}</span></a></li>
+        <li *ngIf="ifShowModule('system')">
+          <a [routerLink]="'./system'" routerLinkActive="active" class="flex-column-center" matRipple>
+            <span>{{l("系统")}}</span></a></li>
+        <li *ngIf="ifShowModule('material')">
+          <a [routerLink]="'./material'" routerLinkActive="active" class="flex-column-center" matRipple>
+            <span>{{l("材料")}}</span></a></li>
+        <li class="pull-right">
+          <a class="js-right-sidebar flex-column-center" data-close="true" style="color: #fff" matRipple>
+            <i class="material-icons" matBadge="{{messageNum}}" matBadgeColor="warn" [matBadgeHidden]="!messageNum"
+               matBadgePosition="above after">notifications</i>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

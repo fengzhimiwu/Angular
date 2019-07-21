@@ -1,0 +1,29 @@
+<div class="row clearfix" [@routerTransition]>
+  <app-sub-toolbar>
+    <div>项目Bim模型管理</div>
+    <div>
+      <button mat-icon-button color="warn" (click)="delete()" [disabled]="!bimViewer || !bimViewer.selectedBimModel">
+        <mat-icon>delete</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <form class="form-container">
+    <div class="row clearfix">
+      <div class="col-sm-6">
+        <app-project-autocomplete (onOptionSelected)="onOptionSelected($event)"></app-project-autocomplete>
+      </div>
+      <ng-container *ngIf="project">
+        <div class="col-xs-12 m-b-15">
+          <app-bim-viewer [project]="project" [height]="'400px'" #bimViewer>
+          </app-bim-viewer>
+        </div>
+      </ng-container>
+    </div>
+  </form>
+  <app-button-group>
+    <button mat-fab color="primary" (click)="inputFile.click()" [disabled]="!project || !project.id">
+      <mat-icon>add</mat-icon>
+    </button>
+    <input type="file" (change)="changeBimFile($event)" style="display: none" #inputFile>
+  </app-button-group>
+</div>

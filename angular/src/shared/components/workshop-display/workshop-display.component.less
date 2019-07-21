@@ -1,0 +1,112 @@
+/*waitWorkshop = '#03a9f4';
+waitWorkshopClass = 'bg-light-blue';
+waitAssignment = '#2196f3';
+waitAssignmentClass = 'bg-blue';
+inProcessing = '#ff9800';
+inProcessingClass = 'bg-orange';
+inCompleting = '#4caf50';
+inCompletingClass = 'bg-green';
+idling = '#4caf50';
+idlingClass = 'bg-green';*/
+/*基础颜色样式*/
+.wait-workshop {
+  background-color: #3f51b5 !important;
+}.wait-assignment {
+  background-color: #4ac0c0 !important;
+}.in-processing {
+  background-color: #ff6484 !important;
+}.in-completing {
+  background-color: #4caf50 !important;
+}.with-icon-text-container {
+  display: flex;
+  align-items: center;
+  margin-right: 4px;
+}
+/*添加的布局样式*/
+.contentBox span {
+}
+/*遮罩样式*/
+.scrollBox:before, .mask:before {
+  content: ' ';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transition: all 0.33s linear 0s;
+}
+.scrollBox:before {
+  opacity: 0;
+  background-color: transparent;
+  z-index: 0;
+}
+.mask:before {
+  opacity: 0.8;
+  background-color: white;
+  z-index: 2;
+}
+/*选择后的样式*/
+.selected {
+  z-index: 2 !important;
+}
+/*基础布局样式*/
+.scrollBox {
+  /*overflow: hidden;
+  overflow-y: auto;
+  height: 400px;*/
+  position: relative;
+  width: 100%;
+}
+.scrollBox > .loadingBox {
+  width: 50px !important;
+  height: 50px !important;
+  text-align: center;
+  margin: auto;
+}
+.leftContent {
+  padding-right: 0;
+}
+.leftContent > .working-area, .rightContent > .working-area {
+  margin-bottom: 8px;
+  text-align: center;
+  padding: 2px;
+}
+.leftContent > .working-area > .headers, .rightContent > .working-area > .headers {
+  background-color: #E7EAED;
+  z-index: 1;
+  border-radius: 3px;
+  margin-bottom: 4px;
+}.leftContent > .working-area > .content {
+  padding-top: 2px;
+  text-align: left;
+  /*background-color: #E7EAED;*/
+}
+/*台座样式*/
+.chunk {
+  margin: 0 2px;
+  display: inline-block;
+  width: 28px;
+  height: 14px;
+  background-color: #36a2eb;
+  box-shadow: 0 1px 2px #b5b5b5;
+  color: #ffffff;
+  text-align: center;
+  position: relative;
+  z-index: 0;
+  transition: all 0.33s linear 0s;
+  line-height: 16px;
+  cursor: pointer;
+  border-radius: 7px;
+}
+.leftContent > .working-area > .content > .big-chunk, .rightContent > .working-area > .content > .big-chunk {
+  width: 30px;
+}
+/*右边布局*/
+.rightContent {
+  padding-left: 0;
+}
+.rightContent > .working-area > .content {
+  text-align: right;
+  padding-top: 2px;
+  /*background-color: #E7EAED;*/
+}

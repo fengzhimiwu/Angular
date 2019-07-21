@@ -1,0 +1,68 @@
+<div bsModal #modal="bs-modal" class="modal fade" tabindex="-1" role="dialog" (click)="$event.stopPropagation();"
+     aria-labelledby="chatBox" aria-hidden="true" [config]="{backdrop: 'static'}" (onShown)="scrollToBottom()"
+     #modalEle (onHidden)="messages=[]">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="frm_chat_box" novalidate>
+        <div class="modal-header">
+          <button type="button" class="close ban-mobile" (click)="closeModal()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <i class="material-icons arrow-back" matRipple (click)="closeModal()"></i>
+          <h4 class="modal-title">
+            <ng-container *ngIf="receiver">
+              <app-user-head-viewer size="small" [user]="receiver"></app-user-head-viewer>
+              <span style="height: 24px">{{l(receiver.name)}}</span>
+            </ng-container>
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div class="row clearfix">
+            <!--头部加载更多按钮-->
+            <div class="col-sm-12">
+              <div class="pull-loading">
+                  <!-- 点击加载更多的按钮 -->
+                  <button mat-button (click)="pullMessages()">
+                  <mat-spinner diameter="16" color="primary" *ngIf="isTableLoading"
+                               style="display: inline-block;margin-right:6px"></mat-spinner>
+                  <ng-container *ngIf="isTableLoading">正在加载...</ng-container>
+                  <ng-container *ngIf="!isTableLoading">点击加载更多消息</ng-container>
+                </button>
+              </div>
+            </div>
+            <!--消息列表-->
+            <div class="col-sm-12" *ngFor="let m of messages" [@switchIn]
+                 [ngClass]="{'bubble-container': m.receiverUserId !== receiver.id, 'my-bubble-container': m.receiverUserId === receiver.id,'file-bubble': false}">
+              <div class="bubble" matRipple>
+                <!--特殊消息，直接带Link用switch判断跳转自动跳转-->
+                <h5 *ngIf="m.linkUrl" (click)="gotoLinkUrlPage(m)" class="clickable-item">
+                  <i class="material-icons">link</i>{{m.content}}{{m.linkUrl}}
+                </h5>
+                <!--文件消息，带fileItemId-->
+                <app-file-viewer *ngIf="m.fileItemId" [id]="m.fileItemId" [imgHeight]="'200px'"></app-file-viewer>
+                <!--常规消息-->
+                <span *ngIf="!m.fileItemId && !m.linkUrl">{{m.content}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <!--<mat-form-field>-->
+          <!--<input matInput type="text" placeholder="" required [(ngModel)]="inputMessage"-->
+          <!--name="inputMessage">-->
+          <!--</mat-form-field>-->
+          <!-- 上传图片的 -->
+          <input name="fileInput" type="file" style="display: none" #fileInput (input)="changeFile($event)">
+          <i class="material-icons send-button" matRipple [matRippleRadius]="20" [matRippleUnbounded]="true"
+             [matRippleCentered]="true" (click)="fileInput.click()">photo</i>
+          <!-- 输入框 -->
+          <textarea placeholder="请输入" #inputMessage name="inputMessage" (input)="inputText($event)"
+                    (keydown.enter)="sendMessage(inputMessage);$event.preventDefault()"></textarea>
+          <!-- 发送按钮 -->
+          <i class="material-icons send-button" matRipple [matRippleRadius]="20" [matRippleUnbounded]="true"
+             [matRippleCentered]="true" (click)="sendMessage(inputMessage)">send</i>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

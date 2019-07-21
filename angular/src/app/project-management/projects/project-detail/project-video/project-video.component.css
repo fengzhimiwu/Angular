@@ -1,0 +1,8 @@
+.video-card{
+  padding:0;
+}
+.video-card > video {
+  width: 100%;
+  border-radius: 4px;
+  margin-bottom: -4px;
+}

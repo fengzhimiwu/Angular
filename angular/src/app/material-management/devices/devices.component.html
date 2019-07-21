@@ -1,0 +1,61 @@
+<div class="row" [@routerTransition]>
+  <app-sub-toolbar searchTip="搜索编号、名字、类别" [isSearching]="isTableLoading" (searchStart)="search($event)">
+  <h4>设备列表 <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+  <div>
+    <button mat-icon-button color="default" appToolbarSearch>
+      <mat-icon aria-label="搜索" matTooltip="搜索设备">search</mat-icon>
+    </button>
+    <button mat-icon-button color="default">
+      <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+    </button>
+  </div>
+</app-sub-toolbar>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>{{ l("设备编号") }}</th>
+          <th>{{ l("设备名") }}</th>
+          <th>{{ l("类别") }}</th>
+          <th>{{ l("使用单位") }}</th>
+          <th>{{ l("可用次数") }}</th>
+          <th>{{ l("警戒值") }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let device of (devices | paginate: {
+                    id: 'server',
+                    itemsPerPage: pageSize,
+                    currentPage: pageNumber,
+                    totalItems: totalItems
+                  })">
+          <td>{{ device.id }}</td>
+          <td>{{ device.name }}</td>
+          <td>{{ device.category }}</td>
+          <td>{{ device.unit }}</td>
+          <td>{{ device.availableTimes }}</td>
+          <td style="color: red;">{{ device.warningTimes }}</td>
+          <td>
+            <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+            <mat-menu #menu="matMenu">
+              <!--<button mat-menu-item (click)="openDialog(inspection.id)"><mat-icon>create</mat-icon>编辑</button>-->
+              <button mat-menu-item (click)="openDialog(device.id)"><mat-icon>edit</mat-icon>编辑</button>
+              <button mat-menu-item (click)="useDeviceOnce(device)"><mat-icon>remove_circle</mat-icon>使用一次</button>
+              <button mat-menu-item (click)="delete(device)"><mat-icon>delete</mat-icon>删除</button>
+            </mat-menu>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="sys-ngx-pagination" *ngIf="totalItems > pageSize">
+      <pagination-controls (pageChange)="getDataPage($event)" id="server" nextLabel="下一页" previousLabel="上一页">
+      </pagination-controls>
+    </div>
+  </div>
+  <app-button-group>
+    <button mat-fab color="primary" type="button" (click)="openDialog()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </app-button-group>
+</div>

@@ -1,0 +1,9 @@
+﻿<div *ngIf="isMultiTenancyEnabled" class="tenant-change-component m-b-15">
+  <div class="text-center">
+        <span>
+            {{l("当前租户")}}：<span *ngIf="tenant?.tenancyName" title="{{tenant?.name}}"><strong>{{tenant?.tenancyName}}</strong></span>
+          <span *ngIf="!tenant?.tenancyName">{{l("Host")}}</span>
+          <button mat-button color="primary" (click)="showChangeModal()">{{l("更改")}}</button>
+        </span>
+  </div>
+</div>

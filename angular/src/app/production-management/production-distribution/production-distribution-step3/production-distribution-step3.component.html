@@ -1,0 +1,93 @@
+<div class="row" [@routerTransition]>
+  <app-sub-toolbar>
+    <h4>管理已完成的构件 <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+    <div>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="删除全部" matTooltip="将所有已完成的构件移出台座" (click)="clearSubProjects()">delete_sweep</mat-icon>
+      </button>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <mat-card>
+      <div class="row">
+        <div class="col-sm-6 clear-margin">
+          <app-project-autocomplete (onOptionSelected)="project=$event;refresh()"></app-project-autocomplete>
+        </div>
+      </div>
+  </mat-card>
+  <mat-vertical-stepper [linear]="false">
+    <mat-step>
+      <ng-template matStepLabel>查看台座占用情况</ng-template>
+      <div class="row clearfix">
+        <div class="col-sm-12">
+          <app-workshop-display (selectionChange)="pedestal=$event;" *ngIf="project" #workshop
+                                [project]="project"></app-workshop-display>
+        </div>
+      </div>
+      <!--<button mat-raised-button color="primary" matStepperNext class="pull-right">下一步</button>-->
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>已完成构件列表</ng-template>
+      <div class="table-responsive">
+          <table class="table table-hover clear-margin">
+            <thead>
+            <tr>
+              <th>构件颜色：</th>
+              <th colspan="6">
+                <span class="label bg-purple">待分台座</span>
+                <span class="label bg-blue">待分派任务</span>
+                <span class="label bg-orange">处理中</span>
+                <span class="label bg-green">完成</span>
+              </th>
+              <!--<th>-->
+              <!--<span class="label {{colorConsts.idlingClass}}">空闲</span>-->
+              <!--<span class="label {{colorConsts.occupyingClass}}">占用</span>-->
+              <!--</th>-->
+              <!--<th>构件颜色：</th>-->
+              <!--<th colspan="3">-->
+              <!--<span class="label {{colorConsts.waitWorkshopClass}}">待分台座</span>-->
+              <!--<span class="label {{colorConsts.waitAssignmentClass}}">待分派任务</span>-->
+              <!--<span class="label {{colorConsts.inProcessingClass}}">处理中</span>-->
+              <!--<span class="label {{colorConsts.inCompletingClass}}">完成</span>-->
+              <!--</th>-->
+            </tr>
+            <tr>
+              <th></th>
+              <th>梁片编号</th>
+              <th>状态</th>
+              <th>预估完成事件</th>
+              <th>完成时间</th>
+              <th>进度</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let subProject of subProjects | paginate: { id: 'server', itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalItems }"
+                class="clickable-item" (click)="subProjectSelected = subProject">
+              <td><i class="material-icons" *ngIf="subProjectSelected==subProject">check</i></td>
+              <td>{{subProject.code}}</td>
+              <td><span class="label" [ngClass]="subProject.bgClass">{{subProject.stageCode}}</span></td>
+              <td>{{subProject.estimatedFinishedTime | date}}</td>
+              <td>{{subProject.estimatedFinishedTime | date}}</td>
+              <td>
+                <mat-progress-bar mode="determinate" [value]="subProject.progress" style="height: 10px"></mat-progress-bar>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+          <div class="sys-ngx-pagination" *ngIf="totalItems > pageSize">
+            <pagination-controls (pageChange)="getDataPage($event)" id="server" nextLabel="下一页"
+                                 previousLabel="上一页"></pagination-controls>
+          </div>
+      </div>
+      <!--<button mat-button matStepperPrevious>Back</button>-->
+      <!--<button mat-raised-button color="primary" (click)="stepper.reset()" class="pull-right">再来一次</button>-->
+    </mat-step>
+  </mat-vertical-stepper>
+  <app-button-group>
+    <button mat-fab color="primary" (click)="clearOne()" matTooltip="将构件移出台座">
+      <mat-icon>transit_enterexit</mat-icon>
+    </button>
+  </app-button-group>
+</div>

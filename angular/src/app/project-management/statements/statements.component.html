@@ -1,0 +1,67 @@
+<div class="row clearfix full-height" [@routerTransition]>
+  <app-sub-toolbar (searchStart)="searchTemplateStart($event)">
+    <div>报表生成预览下载 <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></div>
+    <div>
+      <button mat-icon-button color="default" appToolbarSearch>
+        <mat-icon aria-label="搜索" matTooltip="搜索报表模板">search</mat-icon>
+      </button>
+      <button mat-icon-button color="default" (click)="refresh();">
+        <mat-icon aria-label="刷新" matTooltip="刷新">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <mat-card>
+    <div class="row clearfix">
+      <div class="col-sm-6">
+        <app-project-autocomplete (onOptionSelected)="project=$event"></app-project-autocomplete>
+      </div>
+      <div class="col-sm-6">
+        <mat-form-field appearance="standard">
+          <mat-label>搜索并选择构件编号</mat-label>
+          <input matInput type="text" placeholder="搜索并选择构件编号" [matAutocomplete]="auto" required
+                 [formControl]="searchSubControl">
+          <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear"
+                  (click)="searchSubControl.setValue('')">
+            <mat-icon>close</mat-icon>
+          </button>
+          <mat-autocomplete #auto="matAutocomplete"
+                            (optionSelected)="selectedSubProject = $event.option.value;searchSubControl.setValue($event.option.viewValue);">
+            <mat-option *ngFor="let option of subProjects" [value]="option">
+              {{option.code}}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    </div>
+  </mat-card>
+  <div class="table-responsive">
+    <table class="table table-hover clear-margin">
+      <thead>
+      <tr>
+        <th>{{l('报表名字')}}</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr [@switchIn]
+          *ngFor="let f of filteredFileItems | paginate: { id: 'server', itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalItems }">
+        <td>{{f.fileName}}</td>
+        <td>
+          <button mat-icon-button matTooltip="预览模板" (click)="openBottomSheet(f, false)"
+                  [disabled]="!selectedSubProject">
+            <mat-icon>print</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="下载报表" (click)="openBottomSheet(f, true)"
+                  [disabled]="!selectedSubProject">
+            <mat-icon>get_app</mat-icon>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="sys-ngx-pagination" *ngIf="totalItems > pageSize">
+      <pagination-controls (pageChange)="getDataPage($event)" id="server" nextLabel="下一页" previousLabel="上一页">
+      </pagination-controls>
+    </div>
+  </div>
+</div>

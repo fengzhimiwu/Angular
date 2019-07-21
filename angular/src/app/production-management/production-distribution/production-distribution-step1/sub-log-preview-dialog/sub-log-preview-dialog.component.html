@@ -1,0 +1,17 @@
+<h1 mat-dialog-title></h1>
+<mat-dialog-content>
+  <mat-list>
+    <mat-list-item *ngFor="let message of logs">
+      <h3 matLine>{{WorkshopHelper.getTypeName(message.pedestal)}}</h3>
+      <p matLine>操作人：{{message.creatorUser.name}}<span class="pull-right">{{message.creationTime | date}}</span></p>
+    </mat-list-item>
+  </mat-list>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button matTooltip="查看构件详情" color="default" mat-dialog-close (click)="openSubProjectLog()">
+    构件详情
+  </button>
+  <button mat-button (click)="closeDialog()" color="primary">
+    关闭
+  </button>
+</mat-dialog-actions>

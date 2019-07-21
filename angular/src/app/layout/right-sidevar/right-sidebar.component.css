@@ -1,0 +1,105 @@
+#rightsidebar {
+  height: calc(100vh - 64px);
+  top: 64px;
+  transition: right 0.5s;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.mat-tab-group .mat-tab-header .mat-tab-label-container .mat-tab-list .mat-tab-labels .mat-tab-label {
+  min-width: 100px !important;
+}
+
+/*聊天列表的样式*/
+ul.chat-box {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow: auto;
+}
+
+.chatlist {
+  height: 72px;
+  border-bottom: 1px solid #eee;
+}
+
+/*.chatlist img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: 16px;
+}*/
+
+.chatlist a {
+  align-items: center;
+  color: inherit;
+  display: flex;
+  font-size: 14px;
+  font-weight: 400;
+  height: 72px;
+  margin: 0;
+  padding: 0 16px;
+  position: relative;
+  text-decoration: none;
+  transition: background 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+  user-select: none;
+}
+
+.chatlist a:hover {
+  text-decoration: none;
+  color: #3f51b5;
+}
+
+.list__left {
+  display: flex;
+  justify-content: flex-start;
+  min-width: 56px;
+  height: 40px !important;
+}
+
+.list__content {
+  text-align: left;
+  flex: 1 1 auto;
+  overflow: hidden;
+  display: flex !important;
+  align-items: flex-start;
+  justify-content: center;
+  flex-direction: column;
+  height: 72px !important;
+}
+
+.title {
+  height: 24px;
+  line-height: 24px;
+  position: relative;
+  text-align: left;
+  font-size: 16px;
+}
+
+.title, .sub-title {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: 0.3s cubic-bezier(0.25, 0.8, 0.5, 1);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sub-title {
+  color: rgba(0, 0, 0, 0.54);
+  font-size: 14px;
+}
+
+.title small {
+  color: #9e9e9e;
+  font-size: 12px;
+}
+.delete-icon {
+  color: #9e9e9e;
+  transition: all 0.33s ease;
+}
+.delete-icon:hover {
+  color: red;
+  transition: all 0.33s ease;
+}

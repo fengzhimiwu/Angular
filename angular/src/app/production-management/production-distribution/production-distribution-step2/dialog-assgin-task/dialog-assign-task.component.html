@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>添加更多相关信息</h1>
+<div mat-dialog-content>
+  <ng-container *ngIf="!data.project"><span style="color: red"><mat-icon>mood</mat-icon>尚未选择项目</span></ng-container>
+  <ng-container *ngIf="data.project">
+    <app-project-member-autocomplete [project]="data.project" (onOptionSelected)="userSelected=$event">
+    </app-project-member-autocomplete>
+    <app-project-member-multiple-selection [project]="data.project" [(usersId)]="participants">
+    </app-project-member-multiple-selection>
+  </ng-container>
+  <mat-form-field>
+    <input matInput placeholder="备注" type="text" #remark name="remark">
+  </mat-form-field>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">取消</button>
+  <button mat-button color="primary" (click)="onOkClick(remark.value)">确定</button>
+</mat-dialog-actions>

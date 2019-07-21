@@ -1,0 +1,33 @@
+.circle-priority, .circle-priority-inner {
+  margin: 0;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  position: relative;
+
+  background-color: #2979ff;
+  height: 24px;
+  width: 24px;
+}
+
+.circle-priority-inner {
+  background-color: #40c4ff;
+  height: 16px;
+  width: 16px;
+}
+
+.circle-priority::before {
+  height: 28px;
+  content: '';
+  position: absolute;
+  bottom: 28px;
+  border-left-width: 1px;
+  border-left-style: solid;
+  border-left-color: rgba(0,0,0,.12);
+}
+/*第一个不显示短线*/
+.circle-priority.first::before {
+  content: none;
+}

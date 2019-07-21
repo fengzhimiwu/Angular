@@ -1,0 +1,51 @@
+<div class="row" [@routerTransition]>
+  <app-sub-toolbar>
+      <h4> {{l('工作项列表')}} <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+    <section>
+      <div>
+          <button mat-icon-button color="default">
+              <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+          </button>
+      </div>
+      <div>
+          <button mat-icon-button color="default">
+              <mat-icon aria-label="帮助" matTooltip="帮助">help</mat-icon>
+          </button>
+      </div>
+    </section>
+  </app-sub-toolbar>
+
+  <div class="table-responsive">
+  <table class="table table-hover">
+    <thead>
+    <tr>
+      <th>{{l('工作项名称')}}</th>
+      <th>{{l('描述')}}</th>
+      <th>{{l('操作')}}</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let taskItem of taskItems | paginate: { id: 'server', itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalItems }">
+      <td>{{taskItem.name}}</td>
+      <td>{{taskItem.remark}}</td>
+      <td>
+        <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item [routerLink]="[{pageNumber: pageNumber}, taskItem.id]"><mat-icon>forward</mat-icon>查看表格</button>
+          <button mat-menu-item (click)="editModal.show(taskItem.id)"><mat-icon>edit</mat-icon>编辑</button>
+          <button mat-menu-item (click)="delete(taskItem)"><mat-icon>delete</mat-icon>删除</button>
+        </mat-menu>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+    <div class="sys-ngx-pagination" *ngIf="totalItems > pageSize">
+      <pagination-controls (pageChange)="getDataPage($event)" id="server" nextLabel="下一页" previousLabel="上一页"></pagination-controls>
+    </div>
+  </div>
+  <app-button-group>
+    <button mat-fab color="primary" type="button" (click)="editModal.show()"><mat-icon>add</mat-icon></button>
+  </app-button-group>
+</div>
+
+<app-task-item-modal #editModal (modalSave)="refresh()"></app-task-item-modal>

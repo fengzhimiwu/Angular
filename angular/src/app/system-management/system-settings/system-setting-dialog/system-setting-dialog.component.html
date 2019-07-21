@@ -1,0 +1,24 @@
+<h1 mat-dialog-title>
+  <ng-container *ngIf="data.item">修改参数</ng-container>
+  <ng-container *ngIf="!data.item">创建新参数</ng-container>
+</h1>
+<form *ngIf="item" #dialogForm="ngForm" (ngSubmit)="save()">
+  <mat-dialog-content>
+    <mat-form-field appearance="standard">
+      <mat-label>参数类别</mat-label>
+      <input matInput placeholder="参数类别" [(ngModel)]="item.key" name="key" [disabled]="true" required>
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>参数值</mat-label>
+      <input matInput placeholder="参数值" [(ngModel)]="item.value" name="value" required>
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>备注</mat-label>
+      <input matInput placeholder="备注" [(ngModel)]="item.description" name="description">
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" [matDialogClose]>关闭</button>
+    <button mat-button type="submit" color="primary" [disabled]="dialogForm.invalid">保存</button>
+  </mat-dialog-actions>
+</form>

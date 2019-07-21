@@ -1,0 +1,52 @@
+﻿<div class="row clearfix" [@routerTransition]>
+  <app-sub-toolbar>
+    <h4> {{l('租户列表')}} <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+    <div>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>{{l("租户用户名")}}</th>
+        <th>{{l("租户名称")}}</th>
+        <th>
+          <div style="text-align:center">{{l('激活')}}</div>
+        </th>
+        <th>{{l('操作')}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let tenant of tenants | paginate: { id: 'server', itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalItems }">
+        <td>{{tenant.tenancyName}}</td>
+        <td>{{tenant.name}}</td>
+        <td align="center">
+          <i class="material-icons" *ngIf="tenant.isActive" style="color:green;">check_box</i>
+          <i class="material-icons" *ngIf="!tenant.isActive" style="color:red;">indeterminate_check_box</i>
+        </td>
+        <td>
+          <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="editTenant(tenant)"><mat-icon>edit</mat-icon>编辑</button>
+            <button mat-menu-item (click)="delete(tenant)"><mat-icon>delete</mat-icon>删除</button>
+          </mat-menu>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="sys-ngx-pagination" *ngIf="totalItems > pageSize">
+      <pagination-controls (pageChange)="getDataPage($event)" id="server" nextLabel="下一页" previousLabel="上一页"></pagination-controls>
+    </div>
+  </div>
+  <app-button-group>
+    <button mat-fab color="primary" type="button" (click)="createTenant()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </app-button-group>
+</div>
+
+<create-tenant-modal #createTenantModal (modalSave)="refresh()"></create-tenant-modal>
+<edit-tenant-modal #editTenantModal (modalSave)="refresh()"></edit-tenant-modal>

@@ -1,0 +1,16 @@
+/*自定义的forge样式*/
+.autodesk-forge {
+  position: relative;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  /*transition: all 0.33s ease-in-out;*/
+}
+/*切换按钮样式*/
+.switch-models {
+  position: absolute;
+  top: 0;
+  right: 15px;
+  z-index: 2;
+}

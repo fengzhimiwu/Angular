@@ -1,0 +1,17 @@
+.with-icon-text-container, .with-icon-text-container > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.with-icon-text-container i.material-icons {
+  margin-right: 6px;
+}
+/*卡片样式重写*/
+.group-card-row, mat-card {
+  margin: 8px;
+}
+@media (max-width: 767px) {
+  .group-card-row, mat-card {
+    margin: 4px;
+  }
+}

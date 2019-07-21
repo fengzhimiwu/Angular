@@ -1,0 +1,30 @@
+<h1 mat-dialog-title>
+  <ng-container *ngIf="data.deviceId">修改设备信息</ng-container>
+  <ng-container *ngIf="!data.deviceId">创建新设备</ng-container>
+</h1>
+<form #deviceForm="ngForm" (ngSubmit)="save()" *ngIf="device">
+  <mat-dialog-content>
+    <mat-form-field appearance="standard">
+      <mat-label>名称</mat-label>
+      <input matInput placeholder="请输入名称" [(ngModel)]="device.name" name="name" required>
+    </mat-form-field>
+    <app-setting-selector settingType="material" key="设备类别" [(value)]="device.category"></app-setting-selector>
+    <app-setting-selector settingType="material" key="设备使用单位" [(value)]="device.unit"></app-setting-selector>
+    <mat-form-field appearance="standard">
+      <mat-label>可用次数</mat-label>
+      <input matInput placeholder="请输入可用次数" [(ngModel)]="device.availableTimes" name="availableTimes" required>
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>警戒值</mat-label>
+      <input matInput placeholder="请输入警戒值" [(ngModel)]="device.warningTimes" name="warningTimes" required>
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>描述</mat-label>
+      <input matInput placeholder="请输入描述" [(ngModel)]="device.description" name="description">
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button type="button" mat-button mat-dialog-close>取消</button>
+    <button type="submit" mat-button color="primary" [disabled]="deviceForm.invalid">确定</button>
+  </mat-dialog-actions>
+</form>

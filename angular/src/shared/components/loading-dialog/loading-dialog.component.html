@@ -1,0 +1,7 @@
+<mat-dialog-content>
+  <mat-spinner diameter="50"></mat-spinner>
+  <span>{{tip}}</span>
+</mat-dialog-content>
+<mat-dialog-actions align="end" *ngIf="isCloseButton" @fadeIn>
+  <button mat-button (click)="onNoClick()" color="warn">强制关闭，并刷新页面</button>
+</mat-dialog-actions>

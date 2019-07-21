@@ -1,0 +1,54 @@
+<div class="row clearfix" [@routerTransition]>
+  <app-sub-toolbar>
+    <h4> {{l('工作台类型列表')}} <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+    <div>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>{{l('类型名称')}}</th>
+        <th>
+          <div style="text-align:center">{{l('激活状态')}}</div>
+        </th>
+        <th>{{l('操作')}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let workshopType of workshopTypes | paginate: { id: 'server', itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalItems }">
+        <td>{{workshopType.name}}</td>
+        <td align="center">
+          <i class="material-icons" *ngIf="workshopType.isActive" style="color:green;">check_box</i>
+          <i class="material-icons" *ngIf="!workshopType.isActive" style="color:red;">indeterminate_check_box</i>
+        </td>
+        <td class="dropdown">
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">
+            <i class="material-icons">menu</i>
+          </a>
+          <ul class="dropdown-menu pull-right">
+            <li><a class="waves-effect waves-block" (click)="editModal.show(workshopType.id)"><i class="material-icons">create</i>编辑</a>
+            </li>
+            <li><a class="waves-effect waves-block" (click)="delete(workshopType)"><i class="material-icons">delete_sweep</i>删除</a>
+            </li>
+          </ul>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="sys-ngx-pagination" *ngIf="totalItems > pageSize">
+      <pagination-controls (pageChange)="getDataPage($event)" id="server" nextLabel="下一页" previousLabel="上一页">
+      </pagination-controls>
+    </div>
+  </div>
+  <app-button-group>
+    <button mat-fab color="primary" type="button" (click)="editModal.show()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </app-button-group>
+</div>
+
+<app-workshop-type-modal #editModal (modalSave)="refresh()"></app-workshop-type-modal>

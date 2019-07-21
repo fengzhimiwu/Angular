@@ -1,0 +1,46 @@
+﻿<div id="LoginArea" [@routerTransition]>
+  <form #loginForm="ngForm" id="LoginForm" method="post" novalidate (ngSubmit)="login()">
+    <!-- novalidate是禁止执行原生的表单验证 -->
+    <h4 class="text-center m-b-25" style="font-size: 21px;">{{l("登录")}}</h4>
+    <div class="row">
+      <div class="col-xs-12">
+        <mat-form-field appearance="outline">
+          <mat-label>用户名、邮件或手机号</mat-label>
+          <input matInput placeholder="请输入用户名、邮件或手机号" autocomplete="off"
+                 [(ngModel)]="loginService.authenticateModel.userNameOrEmailAddress" autoFocus type="text"
+                 autocomplete="off" name="userNameOrEmailAddress" required maxlength="255">
+          <mat-icon matSuffix>person</mat-icon>
+          <!--<mat-hint>Hint</mat-hint>-->
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xs-12">
+        <mat-form-field appearance="outline">
+          <mat-label>密码</mat-label>
+          <input matInput placeholder="请输入密码" [(ngModel)]="loginService.authenticateModel.password" name="password"
+                 required maxlength="32" type="password" autocomplete="off">
+          <mat-icon matSuffix>lock</mat-icon>
+          <!--<mat-hint>Hint</mat-hint>-->
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row m-t-15">
+      <div class="col-xs-6 p-t-5">
+        <mat-checkbox [(ngModel)]="loginService.rememberMe" name="rememberMe" id="rememberme">自动登录</mat-checkbox>
+        <!--<input type="checkbox" [(ngModel)]="loginService.rememberMe" name="rememberMe" id="rememberme"-->
+        <!--class="filled-in chk-col-pink" value="true">-->
+        <!--<label for="rememberme">{{l("自动登录")}}</label>-->
+      </div>
+      <div class="col-xs-6 align-right">
+        <button mat-raised-button color="primary" id="LoginButton" type="submit"
+                [disabled]="!loginForm.form.valid || submitting">{{l("登录")}}</button>
+      </div>
+    </div>
+    <div class="row m-t-15" *ngIf="isSelfRegistrationAllowed">
+      <div class="col-xs-12 align-right">
+        <button mat-button color="primary" [routerLink]="['../register']" [disabled]="submitting">注册</button>
+      </div>
+    </div>
+  </form>
+</div>

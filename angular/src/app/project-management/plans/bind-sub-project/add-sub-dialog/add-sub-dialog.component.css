@@ -1,0 +1,4 @@
+#button {
+    left: 50px;
+    width: calc(100% - 40px);
+}

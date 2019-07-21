@@ -1,0 +1,40 @@
+<div class="row clearfix" [@routerTransition]>
+  <app-sub-toolbar>
+    <div>项目列表 <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></div>
+    <div><button mat-icon-button color="default" (click)="refresh();">
+      <mat-icon aria-label="刷新" matTooltip="刷新">refresh</mat-icon>
+    </button></div>
+  </app-sub-toolbar>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>{{l('项目名称')}}</th>
+        <th>{{l('操作')}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let project of projects | paginate: { id: 'server', itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalItems }">
+        <td>{{project.name}}</td>
+        <td>
+          <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item [routerLink]="['./', project.id]"><mat-icon>forward</mat-icon>查看详细</button>
+            <button mat-menu-item (click)="projectModal.show(project.id)"><mat-icon>edit</mat-icon>编辑</button>
+            <button mat-menu-item (click)="delete(project)"><mat-icon>delete</mat-icon>删除</button>
+          </mat-menu>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="sys-ngx-pagination" *ngIf="totalItems > pageSize">
+      <pagination-controls (pageChange)="getDataPage($event)" id="server" nextLabel="下一页" previousLabel="上一页"></pagination-controls>
+    </div>
+    <app-button-group>
+      <button mat-fab color="primary" type="button" (click)="projectModal.show()"><mat-icon>add</mat-icon></button>
+    </app-button-group>
+  </div>
+</div>
+
+<app-create-project #projectModal (modalSave)="refresh()"></app-create-project>

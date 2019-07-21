@@ -1,0 +1,57 @@
+<div class="row" style="height: 100%" [@routerTransition]>
+  <app-sub-toolbar>
+    <h4><i class="material-icons arrow-back" matRipple (click)="goBack(backUrl)"></i>
+      提交<ng-container *ngIf="taskItemAssignment && taskItemAssignment.taskItem">{{
+        taskItemAssignment.taskItem.name}}<ng-container
+            *ngIf=" taskItemAssignment.isForwarded">转发</ng-container>
+      </ng-container>表格
+    </h4>
+    <div *ngIf="taskItemAssignment">
+      <button mat-icon-button matTooltip="预览表格" (click)="openFormPreviewBottomSheet(taskItemAssignment)">
+        <mat-icon>smartphone</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="查看构件位置" (click)="openWorkshopDialog($event, taskItemAssignment)">
+        <mat-icon>location_on</mat-icon>
+      </button>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="备注和工作项" matTooltip="查看工作项信息和派发备注" (click)="openTaskItemDialog()">assignment</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <div *ngIf="!assignments">
+    <mat-spinner style="margin: auto"></mat-spinner>
+  </div>
+  <ng-container *ngIf="assignments">
+    <!--填写区域-->
+    <app-task-detail-form #assignmentForm [taskItemAssignment]="taskItemAssignment" [readonly]="readonly"></app-task-detail-form>
+    <!--评论区域。第一个dto是任务，所以当任务填写的时候，这里的length是0-->
+    <mat-card *ngFor="let a of assignments;let i = index;">
+      <mat-card-header>
+        <div mat-card-avatar>
+          <app-user-head-viewer [user]="a.user" size="middle"></app-user-head-viewer>
+        </div>
+        <mat-card-title>{{a.user.name}}</mat-card-title>
+        <mat-card-subtitle class="with-icon-text-container">
+          <span *ngIf="a.lastModificationTime"><i class="material-icons">reply</i> {{a.lastModificationTime.fromNow()}}</span>
+          <span *ngIf="!a.lastModificationTime"><i class="material-icons">schedule</i> 委派于{{a.creationTime.format('YYYY-MM-DD HH:mm:ss')}}</span>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <!--<img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">-->
+      <mat-card-content>
+        <mat-form-field appearance="outline" *ngIf="!a.lastModificationTime && !readonly">
+          <mat-label>评论区域</mat-label>
+          <textarea matInput placeholder="写下你的评论" [(ngModel)]="a.taskFormData"></textarea>
+          <!--<mat-icon matSuffix>sentiment_very_satisfied</mat-icon>-->
+          <!--<mat-hint>Hint</mat-hint>-->
+        </mat-form-field>
+        <p *ngIf="a.lastModificationTime || readonly">{{a.taskFormData}}</p>
+        <p *ngIf="!a.lastModificationTime && readonly">该用户还未写下评论...</p>
+      </mat-card-content>
+      <mat-card-actions align="end" *ngIf="!a.lastModificationTime && !readonly">
+        <button mat-button (click)="openForwardDialog(a)"><mat-icon>forward</mat-icon>继续转发</button>
+        <button mat-raised-button color="primary" (click)="save(a)"><mat-icon>check</mat-icon>提交</button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-container>
+</div>
+

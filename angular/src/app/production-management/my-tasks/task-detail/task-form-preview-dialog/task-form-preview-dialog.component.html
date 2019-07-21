@@ -1,0 +1,12 @@
+<mat-nav-list>
+  <ng-container *ngIf="statementDataRefsOb | async as statementDataRefs;else loading">
+    <a mat-list-item *ngIf="statementDataRefs.length == 0">
+      <span mat-line>该任务尚未添加到任何报表模板内</span>
+    </a>
+    <a mat-list-item (click)="openOnlineOffice(sdf.fileItemId)" *ngFor="let sdf of statementDataRefs">
+      <span mat-line>{{sdf.fileItem.fileName}}</span>
+      <span mat-line>{{sdf.fileItem.fileType}}</span>
+    </a>
+  </ng-container>
+  <ng-template #loading>正在加载...</ng-template>
+</mat-nav-list>

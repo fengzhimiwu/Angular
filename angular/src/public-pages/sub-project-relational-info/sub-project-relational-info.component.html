@@ -1,0 +1,146 @@
+<div [@routerTransition]>
+  <mat-toolbar>
+    <h4><button mat-icon-button style="margin-right: 8px;" (click)="backPreviousPage(backUrl)">
+      <mat-icon>arrow_back</mat-icon></button>构件相关信息即记录
+    </h4>
+    <div>
+      <button mat-icon-button matTooltip="查看构件位置" (click)="openWorkshopDialog($event, output.subProject.id)">
+        <mat-icon>location_on</mat-icon>
+      </button>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+      </button>
+    </div>
+  </mat-toolbar>
+  <div class="row group-card-row">
+    <div class="col-xs-12">
+      <div *ngIf="!output">
+        <mat-spinner style="margin: auto"></mat-spinner>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="output">
+    <div class="row group-card-row">
+      <div class="col-xs-12">
+        <mat-card>
+          <h4 class="m-t-0">工序完成情况</h4>
+          <div class="circle-priority-container">
+            <div class="circle-priority" *ngFor="let p of output.priorityList;let i=index;"
+                 [ngClass]="{first:i==0, incomplete:p>getCurrentPriority()}">
+              <!--如果p大于当前的工序，则显示灰色-->
+              <div class="circle-priority-inner" [ngClass]="{incomplete:p>getCurrentPriority()}">{{p}}</div>
+            </div>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+    <div class="row group-card-row">
+      <div class="col-xs-12 col-sm-5">
+        <mat-card>
+          <div id="view">
+            <h4 class="m-t-0">构件基本信息</h4>
+          <img alt="二维码" class="qr-code" matRipple
+               [src]="_fileItem.getUrl(output.subProject.id, FileItemCategory.QrCode)"
+               (click)="downloadQrCodeInfo()">
+          <ul class="dashboard-stat-list">
+            <li class="with-icon-text-container">
+              <span matTooltip="类别">
+                <i class="material-icons">category</i> {{output.subProject.category}}
+              </span>
+            </li>
+            <li class="with-icon-text-container">
+              <span matTooltip="创建时间">
+                <i class="material-icons">schedule</i> {{output.subProject.creationTime | date: 'yyyy-MM-dd HH:mm:ss'}}
+              </span>
+            </li>
+            <li class="with-icon-text-container">
+              <span matTooltip="预计完成时间">
+                <i class="material-icons">check_circle_outline</i> {{output.subProject.estimatedFinishedTime | date: 'yyyy-MM-dd HH:mm:ss'}}
+              </span>
+            </li>
+            <li class="with-icon-text-container">
+              <span matTooltip="描述信息">
+                <i class="material-icons">description</i> {{output.subProject.description && output.subProject.description.length > 0 ? output.subProject.description : '暂无描述'}}
+              </span>
+            </li>
+            <li class="with-icon-text-container">
+              <span matTooltip="构件编号">
+                <i class="material-icons">format_list_numbered</i>{{output.subProject.code}}
+              </span>
+            </li>
+          </ul>
+          </div>
+        </mat-card>
+      </div>
+      <div class="col-xs-12 col-sm-7">
+        <mat-card>
+          <h4 class="m-t-0">当前工作项信息</h4>
+          <div class="table-responsive">
+            <table class="table table-hover clear-margin">
+              <thead>
+              <tr>
+                <th>{{l('任务名')}}</th>
+                <th>{{l('所属工序')}}</th>
+                <th>{{l('状态')}}</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr [@switchIn] *ngFor="let pt of output.ptsState">
+                <td>{{pt.taskItem.name}}</td>
+                <td>{{pt.procedureStep.name}}</td>
+                <td>{{pt.isFinished === null ? '未分派' : pt.isFinished === true ? '已完成' : '已分派'}}</td>
+                <td>
+                  <button mat-icon-button matTooltip="查看任务详情" [disabled]="pt.isFinished === null"
+                          [routerLink]="['/app/production/my-task', pt.taskItemAssignmentId, {readonly: 1, backUrl: router.url}]">
+                    <mat-icon>chevron_right</mat-icon>
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+    <div class="row group-card-row">
+      <div class="col-xs-12 col-sm-12">
+        <mat-card>
+          <h4 class="m-t-0">构件更改记录</h4>
+          <div class="table-responsive">
+            <table class="table table-hover clear-margin">
+              <thead>
+              <tr>
+                <th>{{l('更改时间')}}</th>
+                <th>{{l('状态码')}}</th>
+                <th>{{l('操作人')}}</th>
+                <th>{{l('任务执行人')}}</th>
+                <th>{{l('工作项名称')}}</th>
+                <th>{{l('工序名称')}}</th>
+                <th></th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let log of output.subProjectStageLogs">
+                <td>{{log.creationTime | date: 'yyyy-MM-dd HH:mm:ss'}}</td>
+                <td>{{log.stageCode}}</td>
+                <td>{{log.creatorUser.name}}</td>
+                <td>{{log.taskItemAssignmentId === null ? '无' : log.taskItemAssignment?.user.name}}</td>
+                <td>{{log.taskItemAssignment?.taskItem.name}}</td>
+                <td>{{log.taskItemAssignment?.procedureStepTaskItem?.procedureStep.name}}</td>
+
+                <td>
+                  <button mat-icon-button matTooltip="查看任务详情" [disabled]="log.taskItemAssignmentId === null"
+                          [routerLink]="['../../production/my-task', log.taskItemAssignmentId, {readonly: 1, backUrl: router.url}]">
+                    <mat-icon>chevron_right</mat-icon>
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </mat-card>
+      </div>
+    </div>
+  </ng-container>
+</div>

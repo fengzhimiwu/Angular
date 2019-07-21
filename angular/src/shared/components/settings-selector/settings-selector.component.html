@@ -1,0 +1,8 @@
+<mat-form-field [appearance]="appearance">
+  <mat-label>{{key}}</mat-label>
+  <mat-select placeholder="{{key}}" (selectionChange)="valueChange.emit($event.value)" [value]="value" [required]="required">
+    <mat-option *ngFor="let item of settings" [value]="item.value">
+      {{item.value}}
+    </mat-option>
+  </mat-select>
+</mat-form-field>

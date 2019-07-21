@@ -1,0 +1,52 @@
+<div class="row clearfix" [@routerTransition]>
+  <app-sub-toolbar>
+    <h4>
+      <i class="material-icons arrow-back" matRipple routerLink="../"></i>
+      {{procedure?.name}}工序 <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i>
+    </h4>
+    <div>
+      <button mat-icon-button color="default" (click)="refresh();">
+        <mat-icon aria-label="刷新" matTooltip="刷新">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th>{{l('优先级')}}</th>
+        <th>{{l('工序名称')}}</th>
+        <th>{{l('天数')}}</th>
+        <th>{{l('工作项个数')}}</th>
+        <th>{{l('操作')}}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let procedureStep of procedureSteps;let i=index;">
+        <td>
+          <div class="circle-priority" [ngClass]="{first: i==0}">
+            <div class="circle-priority-inner">{{procedureStep.priority}}</div>
+          </div>
+        </td>
+        <td>{{procedureStep.name}}</td>
+        <td>{{procedureStep.duration}}</td>
+        <td>{{procedureStep.numTaskItems}}</td>
+        <td>
+          <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="showModal(procedureStep.id, false)"><mat-icon>edit</mat-icon>编辑</button>
+            <button mat-menu-item (click)="delete(procedureStep)"><mat-icon>delete</mat-icon>删除</button>
+          </mat-menu>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <app-button-group>
+    <button mat-fab color="primary" type="button" (click)="showModal(procedure.id, true)">
+      <mat-icon>add</mat-icon>
+    </button>
+  </app-button-group>
+</div>
+
+<app-procedure-step-modal #editModal (modalSave)="refresh()"></app-procedure-step-modal>

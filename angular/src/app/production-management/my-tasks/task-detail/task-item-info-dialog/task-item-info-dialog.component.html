@@ -1,0 +1,44 @@
+<div mat-dialog-content>
+  <ng-container *ngIf="taskItemAssignment.taskItem">
+    <h1 mat-dialog-title>工作项与分派信息</h1>
+    <mat-form-field appearance="standard">
+      <mat-label>工作项名称</mat-label>
+      <input matInput placeholder="工作项名称" [(ngModel)]="taskItemAssignment.taskItem.name" name="taskItemName"
+             readonly>
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>工作项描述</mat-label>
+      <input matInput placeholder="工作项描述" [(ngModel)]="taskItemAssignment.taskItem.remark" name="taskItemRemark"
+             readonly>
+    </mat-form-field>
+  </ng-container>
+  <mat-form-field appearance="standard">
+    <mat-label>执行人</mat-label>
+    <input matInput placeholder="执行人" [(ngModel)]="taskItemAssignment.user.name" name="userName" readonly>
+  </mat-form-field>
+  <mat-form-field appearance="standard" *ngIf="taskItemAssignment.remarkAssigned">
+    <mat-label>派发备注</mat-label>
+    <input matInput placeholder="派发备注" [(ngModel)]="taskItemAssignment.remarkAssigned" name="remarkAssigned"
+           readonly>
+  </mat-form-field>
+  <ng-container *ngIf="taskItemAssignment.participantIds">
+    <h1 mat-dialog-title>合作人员</h1>
+    <mat-list>
+      <mat-divider></mat-divider>
+      <ng-container *ngFor="let u of participant">
+        <mat-list-item>
+          <app-user-head-viewer matListAvatar [user]="u" size="middle-small"></app-user-head-viewer>
+          <h3 matLine> {{u.name}} </h3>
+          <p matLine><span> {{u.roleNames}} </span></p>
+        </mat-list-item>
+        <mat-divider></mat-divider>
+      </ng-container>
+    </mat-list>
+  </ng-container>
+  <ng-container *ngIf="taskItemAssignment.creationTime">
+    <p [align]="'end'"><span>{{taskItemAssignment.creationTime.format('YYYY-MM-DD HH:mm:ss')}}派发</span></p>
+  </ng-container>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">关闭</button>
+</mat-dialog-actions>

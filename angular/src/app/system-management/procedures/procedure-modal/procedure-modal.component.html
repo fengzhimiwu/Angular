@@ -1,0 +1,43 @@
+<div bsModal #editModal="bs-modal" class="modal fade" (onShown)="onShown()" tabindex="-1" role="dialog"
+     aria-labelledby="editProcedureModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+
+    <div #modalContent class="modal-content">
+
+      <form *ngIf="active" #editForm="ngForm" id="frm_edit_procedure" novalidate (ngSubmit)="save()">
+
+        <div class="modal-header">
+          <button type="button" class="close" (click)="close()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">
+            <span>{{l("创建新工序模板")}}</span>
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div class="row clearfix">
+            <div class="col-sm-12">
+              <div class="form-group form-float">
+                <div class="form-line">
+                  <input id="procedureName" type="text" name="ProcedureName" [(ngModel)]="model.name" required
+                         maxlength="32" minlength="2" class="validate form-control">
+                  <label for="procedureName" class="form-label">{{l("工序模板名称")}}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button mat-button [disabled]="saving" type="button" (click)="close()">
+            {{l("取消")}}
+          </button>
+          <button mat-button color="primary" [disabled]="!editForm.form.valid || saving" type="submit">
+            {{l("保存")}}
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+</div>

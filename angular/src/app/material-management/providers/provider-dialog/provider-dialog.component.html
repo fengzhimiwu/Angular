@@ -1,0 +1,23 @@
+<h1 mat-dialog-title>
+  <ng-container *ngIf="data.providersId">修改供应商信息</ng-container>
+  <ng-container *ngIf="!data.providersId">创建新供应商</ng-container>
+</h1>
+<form #materialForm="ngForm" (ngSubmit)="save()" *ngIf="provider">
+  <mat-dialog-content>
+    <mat-form-field appearance="standard">
+      <mat-label>供应商名称</mat-label>
+      <input matInput placeholder="请输入供应商名称" [(ngModel)]="provider.providerName" name="providerName" required>
+    </mat-form-field>
+    <app-setting-selector settingType="material" key="材料类别" [(value)]="provider.category"></app-setting-selector>
+    <app-setting-selector settingType="material" key="材料单位" [(value)]="provider.unit"></app-setting-selector>
+    <app-setting-selector settingType="material" key="材料规格" [(value)]="provider.spec"></app-setting-selector>
+    <mat-form-field appearance="standard">
+      <mat-label>样本率%</mat-label>
+      <input matInput placeholder="请输入样本率" [(ngModel)]="provider.sampleRate" name="sampleRate" required>
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button type="button" mat-button mat-dialog-close>取消</button>
+    <button type="submit" mat-button color="primary" [disabled]="materialForm.invalid">确定</button>
+  </mat-dialog-actions>
+</form>

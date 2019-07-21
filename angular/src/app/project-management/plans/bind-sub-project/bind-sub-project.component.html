@@ -1,0 +1,87 @@
+<div class="row" [@routerTransition]>
+  <app-sub-toolbar (searchStart)="searchControl.setValue($event)" searchTip="搜索构件编号" [isSearching]="isTableLoading">
+    <div>通过项目Bim模型管理构件 <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></div>
+    <div>
+      <button mat-icon-button color="default" appToolbarSearch>
+        <mat-icon aria-label="搜索" matTooltip="搜索构件编号">search</mat-icon>
+      </button>
+      <button mat-icon-button color="default" (click)="downloadQrCodes()" [disabled]="stateChanger.states['downloadingQrCodesZip']">
+        <mat-icon aria-label="二维码" matTooltip="创建并下载二维码，构件过多的情况下会需要几分钟来生成二维码">get_app</mat-icon>
+      </button>
+      <button mat-icon-button color="default" (click)="refresh()">
+        <mat-icon aria-label="刷新" matTooltip="刷新">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <mat-card>
+    <div class="row">
+      <div class="col-sm-6">
+        <app-project-autocomplete (onOptionSelected)="onOptionSelected($event)"></app-project-autocomplete>
+      </div>
+      <div class="col-sm-6 clearfix">
+        <app-procedure-autocomplete (onOptionSelected)="procedure=$event;stateChanger.next('bindSubProject')"></app-procedure-autocomplete>
+        <!--<button mat-raised-button color="warn"-->
+        <!--(click)="autoUnBindSubProjects()">-->
+        <!--全部解绑-->
+        <!--</button>-->
+        <!--<button mat-raised-button color="primary" [disabled]="!groupBimModelIds"-->
+        <!--class="pull-right" (click)="openAddSubDialog()">给模型生成构件-->
+        <!--</button>-->
+      </div>
+      <!--<div class="col-sm-4">
+        <label>选择显示的构件</label><br>
+        <mat-radio-group [(ngModel)]="dbIdType" (change)="refresh()">
+          <mat-radio-button [value]="0">全部</mat-radio-button>
+          <mat-radio-button [value]="1">本页</mat-radio-button>
+        </mat-radio-group>
+      </div>-->
+      <ng-container>
+        <div class="col-sm-12">
+          <app-bim-viewer [project]="project" *ngIf="project else elseTip" (onBimModelLoad)="groupBimModelIds=$event"
+             (selectedBimModelChange)="selectedBimModel=$event;stateChanger.next('bindSubProject');" [height]="'300px'"
+                          (onSelectionChange)="bimSelectionChange($event)" #bimViewer>
+          </app-bim-viewer>
+          <ng-template #elseTip>
+            <div class="empty-state"><mat-icon class="m-r-10">mood</mat-icon>请先选择项目</div>
+          </ng-template>
+        </div>
+      </ng-container>
+    </div>
+  </mat-card>
+  <div class="table-responsive">
+    <table class="table table-hover clear-margin" *ngIf="project">
+      <thead>
+      <tr>
+        <th>{{l('构件编号')}}</th>
+        <th>{{l('Bim模型Id')}}</th>
+        <th>{{l('批次')}}</th>
+        <th>{{l('创建时间')}}</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngIf="subProjects && subProjects.length < 1"><td colspan="5" class="text-center">构件列表为空...</td></tr>
+      <tr [@switchIn]
+          *ngFor="let subProject of subProjects | paginate: { id: 'server', itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalItems }">
+        <td>{{subProject.code}}</td>
+        <td>{{subProject.bimModelDbId}}</td>
+        <td>{{subProject.batchNum }}</td>
+        <td>{{subProject.creationTime | date: 'yyyy年MM月dd日'}}</td>
+        <td>
+          <button mat-icon-button [routerLink]="['/app/home/relational-info', {backUrl: router.url}]" [queryParams]="{id: subProject.id}">
+          <mat-icon>details</mat-icon>
+        </button>
+          <button mat-icon-button (click)="delete(subProject)"><mat-icon>delete</mat-icon></button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+    <div class="sys-ngx-pagination" *ngIf="totalItems > pageSize">
+      <pagination-controls (pageChange)="getDataPage($event)" id="server" nextLabel="下一页" previousLabel="上一页">
+      </pagination-controls>
+    </div>
+  </div>
+  <app-button-group>
+    <button mat-fab color="primary" type="button" (click)="openAddSubDialog()"><mat-icon>add</mat-icon></button>
+  </app-button-group>
+</div>

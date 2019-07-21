@@ -1,0 +1,51 @@
+<form #formItem="ngForm" (ngSubmit)="dialogRef.close()">
+  <h1 mat-dialog-title>添加/修改表格项</h1>
+  <div mat-dialog-content>
+    <div [ngSwitch]="data.selectedFormItem.type" class="row">
+      <!--勾选框-->
+      <!--文字-->
+      <!--图片上传-->
+      <div class="col-sm-12">
+        <mat-form-field appearance="standard">
+          <mat-label>名字</mat-label>
+          <input matInput placeholder="请输入名字" [formControl]="nameControl" name="name" required>
+          <mat-error *ngIf="nameControl.errors?.duplicatedName">本名字已在表格中被使用过</mat-error>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-12">
+        <mat-form-field appearance="standard">
+          <mat-label>提示文字</mat-label>
+          <input matInput placeholder="请输入提示文字" [(ngModel)]="data.selectedFormItem.hint" name="hint">
+        </mat-form-field>
+      </div>
+      <!--数值-->
+      <div class="col-sm-12" *ngSwitchCase="TaskinputControlType.number">
+        <mat-form-field appearance="standard">
+          <mat-label>允许误差</mat-label>
+          <input matInput placeholder="请输入允许误差" [(ngModel)]="data.selectedFormItem.allowedError" name="allowedError" required>
+        </mat-form-field>
+      </div>
+      <div class="col-sm-12" *ngSwitchCase="TaskInputControlType.number">
+        <mat-form-field appearance="standard">
+          <mat-label>采样个数(0表示不作限制)</mat-label>
+          <input type="number" matInput placeholder="请输入采样个数((0表示不作限制)" [(ngModel)]="data.selectedFormItem.expectedValNum" name="expectedValNum" required>
+        </mat-form-field>
+      </div>
+      <!--搜索选择-->
+      <div class="col-sm-12" *ngSwitchCase="TaskInputControlType.selection">
+        <mat-form-field appearance="standard">
+          <mat-label>选择的数据来源</mat-label>
+          <mat-select placeholder="请选择数据来源" [(ngModel)]="data.selectedFormItem.autocompleteType" name="autocompleteType" required>
+            <mat-option [value]="TaskInputAutocompleteType.provider">供应商列表</mat-option>
+            <mat-option [value]="TaskInputAutocompleteType.inventory">存库列表</mat-option>
+            <mat-option [value]="TaskInputAutocompleteType.examination">检验报告列表</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+  <mat-dialog-actions align="end">
+    <button mat-button type="button" (click)="onNoClick()" color="default">取消</button>
+    <button mat-button type="submit" color="primary" [disabled]="formItem.form.invalid || nameControl.invalid">保存并关闭</button>
+  </mat-dialog-actions>
+</form>

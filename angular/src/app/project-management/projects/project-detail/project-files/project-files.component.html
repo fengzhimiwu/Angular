@@ -1,0 +1,27 @@
+<table class="table table-hover">
+  <thead>
+  <tr>
+    <th>{{l('文件名称')}}</th>
+    <th>{{l('文件大小')}}</th>
+    <!--<th>{{l('备注')}}</th>-->
+    <th>{{l('操作')}}</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let fileItem of fileItems | paginate: { id: 'server', itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalItems }">
+    <td>{{fileItem.fileName}}</td>
+    <td>{{fileItem.fileSize}}</td>
+    <td>
+      <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item (click)="download(fileItem)"><mat-icon>arrow_downward</mat-icon>下载</button>
+        <button mat-menu-item (click)="delete(fileItem)"><mat-icon>delete_sweep</mat-icon>删除</button>
+      </mat-menu>
+    </td>
+  </tr>
+  </tbody>
+</table>
+  <app-button-group style="position: fixed;">
+    <input type="file" style="display: none;" (change)="changeFile($event)" required #fileInput>
+    <button mat-fab color="primary" type="button" (click)="fileInput.click()"><mat-icon>add</mat-icon></button>
+  </app-button-group>

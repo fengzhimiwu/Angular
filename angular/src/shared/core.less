@@ -1,0 +1,102 @@
+// angular material 的主题样式
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+/*material组件样式修改，及布局*/
+mat-form-field {
+  width: 100%;
+}
+/* 全局自定义样式 */
+.form-container {margin: 32px;}
+mat-card {margin: 16px;}
+@media (max-width: 767px) {
+  .form-container {margin: 16px;}
+  mat-card {margin: 8px;}
+}
+mat-dialog-actions {
+  box-sizing: content-box;
+}
+/* fallback */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(../assets/fonts/flUhRq6tzZclQEJ-Vdg-IuiaDsNc.woff2) format('woff2');
+}
+
+/* General */
+.clickable-item {
+  cursor: pointer;
+}
+.clear-margin{
+  margin: 0 !important;
+}.clear-padding{
+  padding: 0 !important;
+}
+/*页码样式修改*/
+.sys-ngx-pagination /deep/ .ngx-pagination .ellipsis::after {
+  content: none;
+}
+.sys-ngx-pagination /deep/ ul.ngx-pagination {
+  margin-top: 1rem;
+  padding: 0;
+}
+.sys-ngx-pagination /deep/ .ngx-pagination a:hover, .sys-ngx-pagination /deep/ .ngx-pagination a:focus {
+  text-decoration:none;
+}
+
+// modal样式调整
+.modal-backdrop {
+  z-index: 20;
+}
+
+.modal {
+  z-index: 21;
+}
+
+/*普通卡片视图样式的修改，响应式表格布局*/
+.table-responsive {
+  overflow: auto;
+  border: none;
+}
+table {
+  margin-top: 16px;
+}
+tr>:first-child {
+  padding-left: 32px !important;
+}
+tr>:last-child {
+  padding-right: 32px !important;
+}
+/*空状态*/
+.empty-state {
+  /*max-height: 512px;
+  min-height: 256px;
+  background: url("../assets/images/empty-state.png") no-repeat 50% 50%;
+  background-size: auto 100%;*/
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.state-text > {
+  position: absolute;
+  /*bottom: 16%;*/
+  top: 0;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+/*手机显示样式更改*/
+@media (max-width: 767px) {
+  .ban-mobile {
+    display: none;
+  }
+  .card {
+    margin-bottom: 15px;
+  }
+  tr>:first-child {
+    padding-left: 16px !important;
+  }
+  tr>:last-child {
+    padding-right: 16px !important;
+  }
+}

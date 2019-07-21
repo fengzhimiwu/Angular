@@ -1,0 +1,319 @@
+<div bsModal #createWorkshopModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="createWorkshopModal"
+    aria-hidden="true" [config]="{backdrop: 'static'}">
+
+    <div class="modal-dialog" style="width:1200px !important;">
+        <div #modalContent class="modal-content">
+
+            <div class="card main-content">
+                <div class="header" style="display: flex;">
+                    <h2 style="display: flex;justify-content: center;align-items: center;">
+                        创建布局
+                        <i class="material-icons" (click)="cancel()">clear</i>
+                    </h2>
+                </div>
+                <div class="body table-responsive">
+
+                    <form class="example-form" #editUserForm="ngForm" novalidate>
+                        <div class="production-line col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <mat-form-field>
+                                <input matInput placeholder="请输入布局名称" name="LayoutName" required type="text"
+                                    [(ngModel)]="form.layoutName">
+                            </mat-form-field>
+                        </div>
+                        <div class="production-line col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <mat-form-field>
+                                <mat-select placeholder="请输入布局方式" [(value)]="form.layoutWay" (selectionChange)="inputChange()">
+                                    <mat-option *ngFor="let item of layoutWays" [value]="item.value">
+                                        {{item.viewValue}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                        <div class="production-line col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <mat-form-field>
+                                <input matInput placeholder="请输入生产线数量" name="productionLine" required type="number"
+                                    [(ngModel)]="form.productionLine" (ngModelChange)="inputChange()">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="production-line col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <mat-form-field>
+                                <input matInput placeholder="请输入一条生产线对称两个区域中，某一个区域中的绑扎台数量" name="rebarPiece" required type="number"
+                                    [(ngModel)]="form.bindRebar" (ngModelChange)="inputChange()">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="production-line col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <mat-form-field>
+                                <input matInput placeholder="请输入一条生产线对称两个区域中，某一个区域中的制梁台数量" name="systemBeam" required type="number"
+                                    [(ngModel)]="form.beamPedestal" (ngModelChange)="inputChange()">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="production-line col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                            <mat-form-field>
+                                <input matInput placeholder="请输入一条生产线对称两个区域中，某一个区域中的存梁台数量" name="saveBeam" required type="number" [(ngModel)]="form.saveBeam"
+                                    (ngModelChange)="inputChange()">
+                            </mat-form-field>
+                        </div>
+
+                        <div class="btnBox col-lg-3 col-md-3 col-sm-3 col-xs-4">
+                            <button [disabled]="!editUserForm.form.valid" type="button" mat-raised-button color="primary"
+                                (click)="autogeneration()">生成布局图</button>
+                        </div>
+                    </form>
+                    <div class="scrollBox" id="printCreateDiv">
+                        <div class="loadingBox" *ngIf="loading">
+                            <mat-spinner diameter="50"></mat-spinner>
+                        </div>
+
+                        <div *ngIf="SaveBeamNum" class="lessSaveBeamContent">
+                            <div *ngIf="layoutWay" class="contentBox col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div *ngFor="let items of GenerateOutputs">
+
+                                    <div class="leftContent col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="borderBox">
+                                            <div class="saveBeamStage col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                                <div class="headers">存梁台</div>
+                                                <div class="saveBeamContent">
+                                                    <span *ngFor="let item of items.lU_SaveBeam" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                            <div class="systemBeamStage col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                                <div class="headers">制梁台</div>
+                                                <div class="systemBeamContent">
+                                                    <span *ngFor="let item of items.lU_BeamPedestal" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                            <div class="rebar col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                                <div class="headers">绑扎台</div>
+                                                <div class="rebarContent">
+                                                    <span *ngFor="let item of items.lU_BindRebar" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="rightContent col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="borderBox">
+                                            <div class="rebar col-lg-2 col-md-2 col-sm-2 col-xs-2">
+                                                <div class="headers">绑扎台</div>
+                                                <div class="rebarContent">
+                                                    <span *ngFor="let item of items.lU_BindRebar" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                            <div class="systemBeamStage col-lg-4 col-md-4 col-sm-4 col-xs-4">
+                                                <div class="headers">制梁台</div>
+                                                <div class="systemBeamContent">
+                                                    <span *ngFor="let item of items.lU_BeamPedestal" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                            <div class="saveBeamStage col-lg-6 col-md-6 col-sm-6 col-xs-6">
+                                                <div class="headers">存梁台</div>
+                                                <div class="saveBeamContent">
+                                                    <span *ngFor="let item of items.lU_SaveBeam" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                            <div *ngIf="slayoutWay" class="contentBoxs col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                <div *ngFor="let items of GenerateOutputs" class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+
+                                    <div class="leftContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="borderBox">
+                                            <div class="saveBeamStage col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="headers col-lg-2 col-md-2 col-sm-2 col-xs-2">存梁台</div>
+                                                <div class="saveBeamContent col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                    <span *ngFor="let item of items.lU_SaveBeam" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                            <div class="systemBeamStage col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="headers col-lg-2 col-md-2 col-sm-2 col-xs-2">制梁台</div>
+                                                <div class="systemBeamContent col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                    <span *ngFor="let item of items.lU_BeamPedestal" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                            <div class="rebar col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="headers col-lg-2 col-md-2 col-sm-2 col-xs-2">绑扎台</div>
+                                                <div class="rebarContent col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                    <span *ngFor="let item of items.lU_BindRebar" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="rightContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                        <div class="borderBox">
+                                            <div class="rebar col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="headers col-lg-2 col-md-2 col-sm-2 col-xs-2">绑扎台</div>
+                                                <div class="rebarContent col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                    <span *ngFor="let item of items.lU_BindRebar" class="chunk"></span>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="systemBeamStage col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="headers col-lg-2 col-md-2 col-sm-2 col-xs-2">制梁台</div>
+                                                <div class="systemBeamContent col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                    <span *ngFor="let item of items.lU_BeamPedestal" class="chunk"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="saveBeamStage col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="headers col-lg-2 col-md-2 col-sm-2 col-xs-2">存梁台</div>
+                                                <div class="saveBeamContent col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                    <span *ngFor="let item of items.lU_SaveBeam" class="chunk"></span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div *ngIf="!SaveBeamNum" class="moreSaveBeamContent">
+                            <div *ngIf="layoutWay" class="contentBox col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <div *ngFor="let items of GenerateOutputs">
+
+                                    <div class="leftContent col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="borderBox">
+                                            <div class="saveBeamStage col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                                <div class="headers">存梁台</div>
+                                                <div class="saveBeamContent">
+                                                    <span *ngFor="let item of items.lU_SaveBeam" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                            <div class="systemBeamStage col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                                <div class="headers">制梁台</div>
+                                                <div class="systemBeamContent">
+                                                    <span *ngFor="let item of items.lU_BeamPedestal" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                            <div class="rebar col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                                                <div class="headers">钢筋</div>
+                                                <div class="rebarContent">
+                                                    <span *ngFor="let item of items.lU_BindRebar" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="rightContent col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                                        <div class="borderBox">
+                                            <div class="rebar col-lg-1 col-md-1 col-sm-1 col-xs-1">
+                                                <div class="headers">钢筋</div>
+                                                <div class="rebarContent">
+                                                    <span *ngFor="let item of items.lU_BindRebar" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                            <div class="systemBeamStage col-lg-3 col-md-3 col-sm-3 col-xs-3">
+                                                <div class="headers">制梁台</div>
+                                                <div class="systemBeamContent">
+                                                    <span *ngFor="let item of items.lU_BeamPedestal" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                            <div class="saveBeamStage col-lg-8 col-md-8 col-sm-8 col-xs-8">
+                                                <div class="headers">存梁台</div>
+                                                <div class="saveBeamContent">
+                                                    <span *ngFor="let item of items.lU_SaveBeam" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+
+                            <div *ngIf="slayoutWay" class="contentBoxs col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                <div *ngFor="let items of GenerateOutputs" class="col-lg-6 col-md-6 col-sm-6 col-xs-6">
+
+                                    <div class="leftContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                        <div class="borderBox">
+                                            <div class="saveBeamStage col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="headers col-lg-2 col-md-2 col-sm-2 col-xs-2">存梁台</div>
+                                                <div class="saveBeamContent col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                    <span *ngFor="let item of items.lU_SaveBeam" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                            <div class="systemBeamStage col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="headers col-lg-2 col-md-2 col-sm-2 col-xs-2">制梁台</div>
+                                                <div class="systemBeamContent col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                    <span *ngFor="let item of items.lU_BeamPedestal" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                            <div class="rebar col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="headers col-lg-2 col-md-2 col-sm-2 col-xs-2">绑扎台</div>
+                                                <div class="rebarContent col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                    <span *ngFor="let item of items.lU_BindRebar" class="chunk"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="rightContent col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                                        <div class="borderBox">
+                                            <div class="rebar col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="headers col-lg-2 col-md-2 col-sm-2 col-xs-2">绑扎台</div>
+                                                <div class="rebarContent col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                    <span *ngFor="let item of items.lU_BindRebar" class="chunk"></span>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="systemBeamStage col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="headers col-lg-2 col-md-2 col-sm-2 col-xs-2">制梁台</div>
+                                                <div class="systemBeamContent col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                    <span *ngFor="let item of items.lU_BeamPedestal" class="chunk"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="saveBeamStage col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                <div class="headers col-lg-2 col-md-2 col-sm-2 col-xs-2">存梁台</div>
+                                                <div class="saveBeamContent col-lg-10 col-md-10 col-sm-10 col-xs-10">
+                                                    <span *ngFor="let item of items.lU_SaveBeam" class="chunk"></span>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" mat-button (click)="cancel()">
+                    取消
+                </button>
+                <button [disabled]="!editUserForm.form.valid" type="button" mat-button color="primary" (click)="close()">
+                    保存
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,210 @@
+﻿<div class="row" [@routerTransition]>
+  <app-sub-toolbar>
+    <h4>首页仪表盘 <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+    <div>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <!-- Widgets -->
+  <div class="row group-card-row">
+    <div class="col-xs-12">
+      <div *ngIf="!dashboardTask">
+        <mat-spinner style="margin: auto"></mat-spinner>
+      </div>
+    </div>
+    <div class="col-xs-12 clear-padding" *ngIf="dashboardTask">
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 clear-padding">
+        <mat-card class="info-box clear-padding hover-expand-effect" style="background: #f4c24f"
+                  routerLink="/app/production/my-task">
+          <div class="icon"><i class="material-icons">playlist_add_check</i></div>
+          <div class="content">
+            <div class="text">待完成任务</div>
+            <div class="number count-to" data-from="0" data-speed="1000"
+                 data-fresh-interval="20">{{dashboardTask.myTaskCount}}</div>
+          </div>
+        </mat-card>
+      </div>
+      <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 clear-padding">
+        <mat-card class="info-box clear-padding hover-expand-effect" style="background: #36a2eb"
+                  routerLink="/app/production/my-task">
+          <div class="icon"><i class="material-icons">forum</i></div>
+          <div class="content">
+            <div class="text">待评论的任务</div>
+            <div class="number count-to" data-from="0" data-speed="1000"
+                 data-fresh-interval="20">{{dashboardTask.myCommentCount}}</div>
+          </div>
+        </mat-card>
+      </div>
+      <!--这里是更多的dashboard任务板-->
+      <!--
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 clear-padding">
+              <mat-card class="info-box clear-padding hover-expand-effect" style="background: #47b3b3"
+                        routerLink="/app/production/my-task">
+                <div class="icon"><i class="material-icons">person_add</i></div>
+                <div class="content">
+                  <div class="text">可供领取的任务</div>
+                  <div class="number count-to" data-from="0" data-speed="1000"
+                       data-fresh-interval="20">{{dashboardTask.availableCount}}</div>
+                </div>
+              </mat-card>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 clear-padding">
+              <mat-card class="info-box clear-padding hover-expand-effect" style="background: #ff6484"
+                        routerLink="./test-web-camera">
+                <div class="icon"><i class="material-icons">help</i></div>
+                <div class="content">
+                  <div class="text"> 相机测试页面</div>
+                  <div class="number count-to" data-from="0" data-speed="1000" data-fresh-interval="20">999</div>
+                </div>
+              </mat-card>
+            </div>
+      -->
+    </div>
+    <!-- project and bim-->
+    <div class="col-xs-12 clear-padding">
+      <mat-card>
+        <app-project-autocomplete (onOptionSelected)="project=$event;this.stateChanger.next('homeDashboard');">
+        </app-project-autocomplete>
+      </mat-card>
+    </div>
+    <div class="empty-state col-xs-12" *ngIf="!project">
+      <p class="state-text">
+        <mat-icon class="m-r-10">mood</mat-icon>
+        请先选择项目，才能查看项目的相关信息...
+      </p>
+    </div>
+    <ng-container *ngIf="project">
+      <!--project video，项目浏览器-->
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 clear-padding">
+        <mat-card class="video-card">
+          <video controls autoplay loop [src]="getFileUrl()" muted>
+            你的浏览器太老了，暂时不支持video标签
+          </video>
+        </mat-card>
+      </div>
+      <!--台座占用情况-->
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 clear-padding">
+        <mat-card>
+          <app-workshop-display *ngIf="project" [project]="project" [readonly]="true"></app-workshop-display>
+        </mat-card>
+      </div>
+      <!--计划对比图-->
+      <div class="col-xs-12 clear-padding" *ngIf="dashboardInfo">
+        <mat-card>
+          <h4 class="m-t-0">项目构件计划</h4>
+          <p *ngIf="!dashboardInfo.planTotalCount">暂无项目计划，请检查项目是否添加了构件计划...</p>
+          <ng-container *ngIf="dashboardInfo.planTotalCount">
+            <div class="progress-bar-label-container clearfix">
+              <div class="progress-bar-label">
+                <mat-icon>timelapse</mat-icon>0 开始<br>{{dashboardInfo.startedTime | date}}
+              </div>
+              <div class="progress-bar-label pull-right clearfix">
+                <mat-icon>timelapse</mat-icon>{{dashboardInfo.planTotalCount}} 结束<br>{{dashboardInfo.endedTime | date}}
+              </div>
+            </div>
+            <mat-progress-bar mode="determinate" [value]="calculateCurrentProgress()"
+                              [bufferValue]="calculatePlanProgress()" [mode]="'buffer'">
+            </mat-progress-bar>
+            <div class="progress-bar-label-container" #divElement>
+              <div class="progress-bar-dynamic-label" #inner
+                   [ngStyle]="calculateProgressLabel(divElement, true, inner)">
+                {{dashboardInfo.offStateCount + dashboardInfo.finishedCount}} 当前<br>
+                <!--              <mat-icon>access_time</mat-icon>{{dashboardInfo.currentProgress | date}}-->
+              </div>
+            </div>
+            <div class="progress-bar-label-container m-t-5" #divElement>
+              <div class="progress-bar-label-stick" [ngStyle]="calculateProgressLabel(divElement, false, inner)"></div>
+              <div class="progress-bar-dynamic-label" #inner
+                   [ngStyle]="calculateProgressLabel(divElement, false, inner)">
+                {{dashboardInfo.planProgressCount}} 计划<br>
+                <!--              <mat-icon>access_time</mat-icon>{{dashboardInfo.currentPlanProgress | date}}-->
+              </div>
+            </div>
+          </ng-container>
+          <h4 class="m-b-0">项目实际进展与计划进展</h4>
+        </mat-card>
+      </div>
+      <!--统计图标charts-->
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 clear-padding">
+        <div class="col-xs-12 clear-padding">
+          <mat-card>
+            <h4 class="m-t-0">项目生产情况</h4>
+            <canvas id="sub_donut_chart"></canvas>
+          </mat-card>
+        </div>
+      </div>
+<!--
+      <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 clear-padding" *ngIf="dashboardInfo">
+        <div class="col-xs-12 clear-padding">
+          <mat-card>
+            <h4 class="m-t-0">质量情况</h4>
+            <canvas id="quality_donut_chart"></canvas>
+          </mat-card>
+        </div>
+      </div>
+-->
+    </ng-container>
+    <!--
+      <div class="row clearfix">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+          <div class="card">
+            <div class="header">
+              <div class="row clearfix">
+                <div class="col-xs-12 col-sm-12">
+                  <span>绑扎台梁片实时状态</span>
+                </div>
+              </div>
+              &lt;!&ndash; <ul class="header-dropdown m-r&#45;&#45;5">
+                <li class="dropdown">
+                  <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                     aria-haspopup="true" aria-expanded="false">
+                    <i class="material-icons">more_vert</i>
+                  </a>
+                  <ul class="dropdown-menu pull-right">
+                    <li><a href="javascript:void(0);">查看钢筋绑扎台</a></li>
+                    <li><a href="javascript:void(0);">查看制梁台</a></li>
+                    <li><a href="javascript:void(0);">查看存梁台</a></li>
+                  </ul>
+                </li>
+              </ul> &ndash;&gt;
+            </div>
+            <div class="body">
+              <div id="real_time_chart1" class="dashboard-flot-chart"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <div class="card">
+              <div class="header">
+                <div class="row clearfix">
+                  <div class="col-xs-12 col-sm-12">
+                    <span>制梁台上梁片实时状态</span>
+                  </div>
+                </div>
+              </div>
+              <div class="body">
+                <div id="real_time_chart2" class="dashboard-flot-chart"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+              <div class="card">
+                <div class="header">
+                  <div class="row clearfix">
+                    <div class="col-xs-12 col-sm-12">
+                      <span>存梁台上梁片实时状态</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="body">
+                  <div id="real_time_chart3" class="dashboard-flot-chart"></div>
+                </div>
+              </div>
+            </div>
+      </div>-->
+    <!-- #END# CPU Usage -->
+  </div>
+</div>

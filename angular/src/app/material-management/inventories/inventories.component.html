@@ -1,0 +1,67 @@
+<div class="row" [@routerTransition]>
+  <app-sub-toolbar searchTip="搜索存库编号" [isSearching]="isTableLoading" (searchStart)="search($event)">
+  <h4>材料库存列表 <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+  <div>
+    <button mat-icon-button color="default" appToolbarSearch>
+      <mat-icon aria-label="搜索" matTooltip="搜索存库编号">search</mat-icon>
+    </button>
+    <button mat-icon-button color="default">
+      <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+    </button>
+  </div>
+</app-sub-toolbar>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th>{{ l("编号") }}</th>
+          <th>{{ l("材料类别") }}</th>
+          <th>{{ l("供应商") }}</th>
+          <th>{{ l("批次") }}</th>
+          <th>{{ l("数量") }}</th>
+          <th>{{ l("单位") }}</th>
+          <th>{{ l("样本总数") }}</th>
+          <th>{{ l("已检验样本") }}</th>
+          <th>{{ l("是否收货") }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let inventory of (inventories | paginate: {
+                    id: 'server',
+                    itemsPerPage: pageSize,
+                    currentPage: pageNumber,
+                    totalItems: totalItems
+                  })">
+          <td>{{ inventory.code }}</td>
+          <td>{{ inventory.provider?.category }}</td>
+          <td>{{ inventory.provider?.providerName }}</td>
+          <td>{{ inventory.batchNum }}</td>
+          <td>{{ inventory.amount }}</td>
+          <td>{{ inventory.provider?.unit }}</td>
+          <td>{{ inventory.sampleTotal }}</td>
+          <td>{{ inventory.checkedSample }}</td>
+          <td><mat-checkbox disabled [checked]="inventory.isArrival"></mat-checkbox></td>
+          <td>
+            <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="openInventoryDialog(inventory.id)"><mat-icon>create</mat-icon>编辑</button>
+              <button mat-menu-item (click)="openExaminationDialog(inventory)"><mat-icon>input</mat-icon>送检</button>
+              <button mat-menu-item (click)="checkArrive(inventory.id)"><mat-icon>check</mat-icon>确认收货</button>
+              <button mat-menu-item (click)="delete(inventory)"><mat-icon>delete</mat-icon>删除</button>
+            </mat-menu>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="sys-ngx-pagination" *ngIf="totalItems > pageSize">
+      <pagination-controls (pageChange)="getDataPage($event)" id="server" nextLabel="下一页" previousLabel="上一页">
+      </pagination-controls>
+    </div>
+  </div>
+  <!--<app-button-group>-->
+    <!--<button mat-fab color="primary" type="button" (click)="openDialog()">-->
+      <!--<mat-icon>add</mat-icon>-->
+    <!--</button>-->
+  <!--</app-button-group>-->
+</div>

@@ -1,0 +1,19 @@
+<!--显示用户头像-->
+<ng-container *ngIf="user.headFileItemId else elseTextHeader">
+  <div class="img-container" [ngClass]="{'user-head-middle': size === 'middle',
+ 'user-head-middle-small': size === 'middle-small',
+ 'user-head-small': size === 'small',
+ 'user-head-large': size === 'large'}">
+  <img alt="" [src]="_fileItemService.getUrl(user.headFileItemId)" #imgEle (error)="isImgLoadedError=true"
+       [ngStyle]="(imgEle.width > imgEle.height) && isImgLoaded ? {'height': '100%'} : {'width': '100%'}">
+  </div>
+</ng-container>
+<!--如果没有用户头像，则用名字的第一个字代替-->
+<ng-template #elseTextHeader>
+  <div class="non-user-head-img" [ngClass]="{'user-head-middle': size === 'middle',
+ 'user-head-middle-small': size === 'middle-small',
+ 'user-head-small': size === 'small',
+ 'user-head-large': size === 'large'}">
+    {{user.name[0] | uppercase}}
+  </div>
+</ng-template>

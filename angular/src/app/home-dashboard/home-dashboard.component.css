@@ -1,0 +1,58 @@
+.info-box {
+  cursor: pointer;
+}
+.info-box, .info-box > .content > .text, .info-box > .content > .number {
+  color: white;
+}
+/*卡片样式重写*/
+.group-card-row, mat-card {
+  margin: 8px;
+}
+@media (max-width: 767px) {
+  .group-card-row, mat-card {
+    margin: 4px;
+  }
+}
+/*视频样式*/
+.video-card{
+  padding:0;
+}
+.video-card > video {
+  width: 100%;
+  border-radius: 4px;
+  margin-bottom: -6px;
+}
+/*计划进度条*/
+mat-progress-bar {
+  margin: 4px 0;
+}
+.progress-bar-label-container {
+  width: 100%;
+  position: inherit;
+}
+.progress-bar-label, .progress-bar-dynamic-label {
+  background: #3F51B5;
+  color: #ffffff;
+  border-radius: 4px;
+  padding: 4px;
+  display: inline-block;
+}
+.progress-bar-label > mat-icon, .progress-bar-dynamic-label > mat-icon {
+  margin-right: 2px;
+  font-size: 12px;
+  height: 12px;
+  width: 12px;
+}
+.progress-bar-dynamic-label {
+  position: relative;
+}
+
+.progress-bar-label-stick {
+  height: 65px;
+  position: absolute;
+  overflow: auto;
+  width: 1px;
+  background: rgba(0,0,0,0.12);
+  margin: 0 !important;
+  bottom: 4px;
+}

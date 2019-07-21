@@ -1,0 +1,32 @@
+<div class="row clearfix" [@routerTransition]>
+  <app-sub-toolbar>
+    <h4> {{l('布局管理')}} <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+    <div>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <div class="form-container">
+    <div class="row">
+      <div class="crosswise-layout col-sm-6 m-t-15 m-b-15" *ngFor="let item of layoutItem">
+        <mat-card class="layout-content clear-margin" matRipple>
+          <div class="headers clearfix">
+            {{item.layoutName}}
+            <button class="pull-right" mat-icon-button color="warn" (click)="delete(item)">
+              <mat-icon aria-label="删除此布局" matTooltip="删除此布局">delete</mat-icon>
+            </button>
+          </div>
+          <img alt="布局图片" mat-card-image [src]="item.image" (click)="editLayout(item)" class="crosswise-content">
+        </mat-card>
+      </div>
+    </div>
+  </div>
+  <app-button-group>
+    <button mat-fab color="primary" type="button" (click)="addParameter()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </app-button-group>
+</div>
+<create-workshop-modal #createWorkshopModal (modalSave)="refresh()"></create-workshop-modal>
+<edit-workshop-modal #editWorkshopModal></edit-workshop-modal>

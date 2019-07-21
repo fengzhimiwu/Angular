@@ -1,0 +1,46 @@
+:host {
+  display: inline-block;
+  margin-right: 16px;
+}
+.img-container {
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+.img-container > img {
+  z-index: 0;
+  /*min-width: 100%;*/
+  /*min-height: 100%;*/
+}
+/*用户头像*/
+.user-head-middle, .user-head-small, .user-head-middle-small, .user-head-large  {
+  border-radius: 50%;
+}
+.user-head-middle  {
+  width: 48px;
+  height: 48px;
+  font-size: 24px;
+}
+.user-head-middle-small {
+  width: 40px;
+  height: 40px;
+  font-size: 20px;
+}.user-head-small {
+  width: 24px;
+  height: 24px;
+  font-size: 12px;
+}
+.user-head-large {
+  width: 64px;
+  height: 64px;
+  font-size: 32px;
+}
+.non-user-head-img {
+  background-color: #757575;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}

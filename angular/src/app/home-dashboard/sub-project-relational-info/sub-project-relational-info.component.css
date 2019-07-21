@@ -1,0 +1,86 @@
+.with-icon-text-container, .with-icon-text-container > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.with-icon-text-container i.material-icons {
+  margin-right: 6px;
+}
+.dashboard-stat-list {
+  margin-top: 0;
+}
+/*二维码样式*/
+.qr-code {
+  cursor: pointer;
+  /* padding: 18px; */
+  /* margin: -40px -20px -20px -20px; */
+  float: right;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 128px;
+}
+/*卡片样式重写*/
+.group-card-row, mat-card {
+  margin: 8px;
+}
+@media (max-width: 767px) {
+  .group-card-row, mat-card {
+    margin: 4px;
+  }
+}
+/*padding变为0不影响样式*/
+.col-xs-12, .col-sm-12, .col-sm-5, .col-sm-7 {
+  padding: 0;
+}
+/*工序流程图样式*/
+.circle-priority-container {
+  overflow: auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
+/*外圈内圈共同样式*/
+.circle-priority, .circle-priority-inner {
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  position: relative;
+
+  background-color: #2979ff;
+  height: 24px;
+  min-width: 24px;
+}
+/*内圈样式*/
+.circle-priority-inner {
+  background-color: #40c4ff;
+  height: 16px;
+  min-width: 16px;
+}
+/*两圆圈的间距*/
+.circle-priority {
+  margin-right: 32px;
+}
+/*圆圈间的横线样式*/
+.circle-priority::before {
+  content: '';
+  position: absolute;
+  right: 28px;
+  width: 24px;
+  border-top-width: 1px;
+  border-top-style: solid;
+  border-top-color: rgba(0,0,0,.12);
+}
+/*第一个不显示短线*/
+.circle-priority.first::before {
+  content: none;
+}
+/*未完成样式的工序*/
+.circle-priority.incomplete {
+  background-color: #a5a5a5;
+}
+.circle-priority-inner.incomplete {
+  background-color: #bfbfbf;
+}

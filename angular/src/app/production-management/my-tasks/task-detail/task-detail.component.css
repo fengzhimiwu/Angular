@@ -1,0 +1,8 @@
+.with-icon-text-container, .with-icon-text-container > span {
+  display: flex;
+  align-items: center;
+}
+.with-icon-text-container > span > i {
+  font-size: 18px;
+  /*margin-right: 4px;*/
+}

@@ -1,0 +1,19 @@
+<div class="empty-state" *ngIf="bimModelFiles && bimModelFiles.length < 1;else elseViewer">
+  <mat-icon class="m-r-10">mood</mat-icon>无BIM模型...
+  <button mat-button routerLink="/app/project/bim-model">去添加</button>
+</div>
+<ng-template #elseViewer>
+  <!--切换模型按钮-->
+  <button class="switch-models" mat-icon-button [matMenuTriggerFor]="menu">
+    <mat-icon>layers</mat-icon>
+  </button>
+  <mat-menu #menu="matMenu">
+    <button mat-menu-item *ngFor="let b of bimModelFiles" (click)="initBimViewer(b)" [disabled]="!bimModelFiles">
+      <mat-icon *ngIf="b === selectedBimModel">check</mat-icon>
+      <span>{{b.fileName}}</span>
+    </button>
+  </mat-menu>
+</ng-template>
+<!--bim viewer的dom元素-->
+<div #viewerDiv class="autodesk-forge"
+     [ngStyle]="{'height':!bimModelFiles||bimModelFiles.length<1?'0':height}"></div>

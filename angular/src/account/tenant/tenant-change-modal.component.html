@@ -1,0 +1,15 @@
+﻿<form #changeTenantForm="ngForm" (ngSubmit)="save()">
+  <h1 mat-dialog-title>{{l("更改租户")}}</h1>
+  <div mat-dialog-content>
+    <mat-form-field appearance="standard">
+      <mat-label>租户用户名</mat-label>
+      <input matInput type="text" placeholder="请输入租户用户名" name="TenancyName" [(ngModel)]="tenancyName" maxlength="64">
+      <mat-hint>{{l("留空切换到Host")}}</mat-hint>
+    </mat-form-field>
+  </div>
+  <mat-dialog-actions align="end">
+    <button type="button" mat-button [disabled]="saving" mat-dialog-close>{{l("取消")}}</button>
+    <button type="submit" mat-button color="primary"
+            [disabled]="!changeTenantForm.form.valid || saving">{{l("确定")}}</button>
+  </mat-dialog-actions>
+</form>

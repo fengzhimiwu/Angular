@@ -1,0 +1,19 @@
+.header {
+  padding-top: 0 !important;
+}
+.user-head-info-box {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: 16px;
+}
+.user-head-info-box > .left-area {
+  flex: 1 0;
+  display: flex;
+  justify-content: flex-end;
+  align-self: stretch;
+  align-items: flex-end;
+}
+.user-head-info-box > .left-area > .clickable-item {
+  display: flex;
+  align-items: center;
+}

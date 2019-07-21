@@ -1,0 +1,61 @@
+<div class="row" [@routerTransition]>
+  <app-sub-toolbar >
+    <div>调整计划 <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></div>
+    <div>
+    </div>
+  </app-sub-toolbar>
+  <mat-card>
+    <mat-card-content>
+      <div class="row">
+        <div class="col-sm-6">
+          <app-project-autocomplete (onOptionSelected)="project=$event"></app-project-autocomplete>
+        </div>
+        <div class="col-sm-6">
+          <app-procedure-autocomplete (onOptionSelected)="procedure=$event"></app-procedure-autocomplete>
+        </div>
+        <div class="col-sm-6">
+          <mat-form-field appearance="standard">
+            <mat-label>延迟天数</mat-label>
+            <input matInput type="number" placeholder="请填写延迟天数" [(ngModel)]="delayDays" name="delayDays" required>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-6">
+          选择项目和工序后，填入延迟的天数即可将对应构件的“预计完成时间”往后延期。受影响的项目会在下面的列表中显示。
+          <ng-container *ngIf="subProjects">（受影响的构件有{{subProjects.length}}个）</ng-container>
+        </div>
+      </div>
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <button mat-raised-button color="primary" [disabled]="saving||!delayDays||!project||!procedure"
+              (click)="adjustSubProject()">提交</button>
+    </mat-card-actions>
+  </mat-card>
+  <div class="table-responsive">
+    <table class="table table-hover clear-margin">
+      <thead>
+      <tr>
+        <th>{{l('构件编号')}}</th>
+        <!--<th>{{l('Bim模型Id')}}</th>-->
+        <th>{{l('批次')}}</th>
+        <th>{{l('创建时间')}}</th>
+        <th>{{l('预计完成时间')}}</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr [@switchIn] *ngFor="let subProject of subProjects">
+        <td>{{subProject.code}}</td>
+        <!--<td>{{subProject.bimModelDbId}}</td>-->
+        <td>{{subProject.batchNum }}</td>
+        <td>{{subProject.creationTime | date: 'yyyy年MM月dd日'}}</td>
+        <td>{{subProject.estimatedFinishedTime | date: 'yyyy年MM月dd日'}}</td>
+        <td>
+          <button mat-icon-button [routerLink]="['/app/home/relational-info', {backUrl: router.url}]" [queryParams]="{id: subProject.id}">
+            <mat-icon>details</mat-icon>
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

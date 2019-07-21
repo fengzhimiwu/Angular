@@ -1,0 +1,46 @@
+<h1 mat-dialog-title>
+  <ng-container *ngIf="data.inventoryId">材料存库修改</ng-container>
+  <ng-container *ngIf="!data.inventoryId">存库进货</ng-container>
+</h1>
+<form #inventoriesForm="ngForm" (ngSubmit)="save()" *ngIf="inventory">
+  <mat-dialog-content>
+    <ng-container *ngIf="data.provider">
+      <mat-form-field appearance="standard">
+        <mat-label>供应商</mat-label>
+        <input matInput placeholder="供应商" [(ngModel)]="data.provider.providerName" name="providerName" disabled>
+      </mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label>材料类别</mat-label>
+        <input matInput placeholder="材料类别" [(ngModel)]="data.provider.category" name="category" disabled>
+      </mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label>样本率</mat-label>
+        <input matInput placeholder="样本率" [(ngModel)]="data.provider.sampleRate" name="sampleRate" disabled>
+      </mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label>规格</mat-label>
+        <input matInput placeholder="规格" [(ngModel)]="data.provider.spec" name="spec" disabled>
+      </mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label>单位</mat-label>
+        <input matInput placeholder="单位" [(ngModel)]="data.provider.unit" name="unit" disabled>
+      </mat-form-field>
+    </ng-container>
+    <mat-form-field appearance="standard">
+      <mat-label>存库编号</mat-label>
+      <input matInput placeholder="请输入存库编号" [(ngModel)]="inventory.code" name="code" required>
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>数量</mat-label>
+      <input matInput placeholder="请输入数量" [(ngModel)]="inventory.amount" name="amount" required>
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>描述</mat-label>
+      <input matInput placeholder="请输入描述" [(ngModel)]="inventory.description" name="description">
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button type="button" mat-button mat-dialog-close>取消</button>
+    <button type="submit" mat-button color="primary" [disabled]="inventoriesForm.invalid">确定</button>
+  </mat-dialog-actions>
+</form>

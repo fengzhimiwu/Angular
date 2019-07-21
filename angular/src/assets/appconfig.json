@@ -1,0 +1,20 @@
+{
+  "remoteServiceBaseUrlBack": "http://localhost:9091",
+  "remoteServiceBaseUrlBack2": "https://dotnet.holacodes.com/api",
+  "remoteServiceBaseUrl": "http://localhost:9091",
+  "appBaseUrl": "http://localhost:9090",
+  "localeMappings": [
+    {
+      "from": "pt-BR",
+      "to": "pt"
+    },
+    {
+      "from": "zh-CN",
+      "to": "zh"
+    },
+    {
+      "from": "he-IL",
+      "to": "he"
+    }
+  ]
+}

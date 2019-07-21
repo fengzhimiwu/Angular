@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>添加构件</h2>
+<mat-dialog-content>
+  <div class="row clearfix">
+    <div class="col-sm-12">
+      <app-project-autocomplete (onOptionSelected)="project=$event"></app-project-autocomplete>
+    </div>
+    <ng-container *ngFor="let s of subProjects;let i;">
+    <div class="col-sm-6">
+      <mat-form-field appearance="standard">
+        <mat-label>构件类别</mat-label>
+        <input matInput placeholder="" required [(ngModel)]="s.category" name="{{s.category}}" disabled>
+        <button mat-icon-button matSuffix color="default" (click)="delete(s)">
+          <mat-icon aria-label="删除" matTooltip="删除">delete</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <div class="col-sm-6">
+      <app-procedure-autocomplete (onOptionSelected)="s.procedureId=$event.id"></app-procedure-autocomplete>
+    </div>
+    </ng-container>
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onNoClick()">取消</button>
+  <button mat-button color="primary" (click)="onOkClick()">确定</button>
+</mat-dialog-actions>

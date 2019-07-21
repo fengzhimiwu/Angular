@@ -1,0 +1,72 @@
+<div class="row" [@routerTransition]>
+  <app-sub-toolbar searchTip="搜索报告编号" [isSearching]="isTableLoading" (searchStart)="search($event)">
+  <h4>送检信息列表 <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+  <div>
+    <button mat-icon-button color="default" appToolbarSearch>
+      <mat-icon aria-label="搜索" matTooltip="搜索报告">search</mat-icon>
+    </button>
+    <button mat-icon-button color="default">
+      <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+    </button>
+  </div>
+</app-sub-toolbar>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead class="thead-light">
+        <tr>
+          <th>{{ l("编号") }}</th>
+          <th>{{ l("材料类别") }}</th>
+          <th>{{ l("供应商") }}</th>
+          <th>{{ l("批号") }}</th>
+          <th>{{ l("采样量") }}</th>
+          <th>{{ l("单位") }}</th>
+          <th>{{ l("送检人") }}</th>
+          <th>{{ l("送检时间") }}</th>
+          <th>{{ l("检验人") }}</th>
+          <th>{{ l("报告时间") }}</th>
+          <th>{{ l("描述") }}</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let inspection of inspections | paginate: {
+                    id: 'server',
+                    itemsPerPage: pageSize,
+                    currentPage: pageNumber,
+                    totalItems: totalItems
+                  }" >
+          <td>{{ inspection.code}}</td>
+          <td>{{ inspection.inventory.provider.category }}</td>
+          <td>{{ inspection.inventory.provider.providerName }}</td>
+          <td>{{ inspection.batchNum }}</td>
+          <td>{{ inspection.sampleAmount }}</td>
+          <td>{{ inspection.inventory.provider.unit }}</td>
+          <td>{{ inspection.creatorUser?.name }}</td>
+          <td>{{ inspection.creationTime | date }}</td>
+          <td>{{ inspection.fileItemId ? inspection.user.name : ''}}</td>
+          <td>{{ inspection.fileItemId ? (inspection.lastModificationTime | date) : '未提交'}}</td>
+          <td>{{ inspection.description }}</td>
+          <td>
+            <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>menu</mat-icon></button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="openDialog(inspection.id)">
+                <mat-icon>check_circle_outline</mat-icon>修改信息/上传附件
+              </button>
+              <button mat-menu-item (click)="downloadReport(inspection)" [disabled]="!inspection.fileItemId"><mat-icon>get_app</mat-icon>下载检验结果</button>
+              <button mat-menu-item (click)="delete(inspection)"><mat-icon>delete</mat-icon>删除</button>
+            </mat-menu>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="sys-ngx-pagination" *ngIf="totalItems > pageSize">
+      <pagination-controls (pageChange)="getDataPage($event)" id="server" nextLabel="下一页" previousLabel="上一页">
+      </pagination-controls>
+    </div>
+  </div>
+  <!--<app-button-group>-->
+    <!--<button mat-fab color="primary" type="button" (click)="openDialog()">-->
+      <!--<mat-icon>add</mat-icon>-->
+    <!--</button>-->
+  <!--</app-button-group>-->
+</div>

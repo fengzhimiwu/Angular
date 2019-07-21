@@ -1,0 +1,9 @@
+mat-dialog-content {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+mat-dialog-content > span {
+  margin-left: 24px;
+}

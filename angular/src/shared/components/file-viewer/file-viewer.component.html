@@ -1,0 +1,19 @@
+<ng-container *ngIf="fileItem && id">
+  <!--图片-->
+  <ng-container *ngIf="FileTypeHelper.isImg(fileItem.fileType)">
+    <img class="clickable-item" [src]="_fileItemService.getUrl(id)" alt="图片{{id}}" (click)="openDialog()" [ngStyle]="{'max-height': imgHeight}">
+  </ng-container>
+  <!--其他文件-->
+  <ng-container *ngIf="!FileTypeHelper.isImg(fileItem.fileType)">
+    <h5 class="clickable-item" (click)="download()">
+      <i class="material-icons">attach_file</i> {{fileItem.fileName}}
+      <span style="font-size: 12px">({{fileItem.fileSize}})</span>
+    </h5>
+  </ng-container>
+</ng-container>
+<!--可拖动式弹出层-->
+<ng-template #dragItem>
+  <div class="example-dialog-content" cdkDrag cdkDragRootElement=".cdk-overlay-pane" (click)="$event.stopPropagation();">
+    <img [src]="_fileItemService.getUrl(id)" alt="图片{{id}}">
+  </div>
+</ng-template>

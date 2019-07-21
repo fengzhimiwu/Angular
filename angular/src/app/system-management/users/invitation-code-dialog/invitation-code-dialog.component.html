@@ -1,0 +1,30 @@
+<h1 mat-dialog-title class="clearfix">管理邀请码
+  <button mat-icon-button (click)="addCode()" class="pull-right" matTooltip="添加邀请码">
+    <mat-icon>add</mat-icon>
+  </button>
+</h1>
+<div mat-dialog-content>
+  <mat-list>
+    <mat-divider></mat-divider>
+    <ng-container *ngIf="invitationCodes && invitationCodes.length<1">
+      <mat-list-item><h3 matLine>暂未添加邀请码</h3></mat-list-item>
+      <mat-divider></mat-divider>
+    </ng-container>
+    <ng-container *ngFor="let i of invitationCodes">
+      <mat-list-item>
+        <p matLine>{{i.id}}</p>
+        <button mat-icon-button class="clipboardBtn" matTooltip="复制邀请链接"
+                [value]="getInvitationCode(i)">
+          <mat-icon>file_copy</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteOne(i)" matTooltip="删除">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-list-item>
+      <mat-divider></mat-divider>
+    </ng-container>
+  </mat-list>
+</div>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="dialogRef.close()" color="primary">关闭</button>
+</mat-dialog-actions>

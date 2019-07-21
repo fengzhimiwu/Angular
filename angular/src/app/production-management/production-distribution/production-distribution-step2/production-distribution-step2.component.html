@@ -1,0 +1,116 @@
+<div class="row" [@routerTransition]>
+  <app-sub-toolbar>
+    <h4>日常任务分派 <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+    <div>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <mat-card>
+    <div class="row">
+      <div class="col-sm-6">
+        <app-project-autocomplete (onOptionSelected)="project=$event;refresh()"></app-project-autocomplete>
+      </div>
+      <div class="col-sm-6">
+      </div>
+    </div>
+  </mat-card>
+  <mat-vertical-stepper [linear]="false" #stepper>
+    <mat-step>
+      <ng-template matStepLabel>选择需要分派任务的台座</ng-template>
+      <div class="row clearfix">
+        <div class="col-sm-12">
+          <app-workshop-display #workshop [(selection)]="pedestalSelection" (selectionChange)="onChooseWorkshop($event)" *ngIf="project"
+                                [project]="project"></app-workshop-display>
+        </div>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>选择任务进行分派</ng-template>
+      <div class="table-responsive">
+        <table class="table table-hover clear-margin">
+          <tr>
+            <th></th>
+            <th>任务名称</th>
+            <th>排序号</th>
+            <th>所属工序</th>
+          </tr>
+          <tr *ngIf="!procedureStepTaskItems">
+            <td colspan="4">请选择台座进行查看</td>
+          </tr>
+          <tr *ngIf="procedureStepTaskItems && procedureStepTaskItems.length < 1">
+            <td colspan="4">任务已分派完成</td>
+          </tr>
+          <tr *ngFor="let item of procedureStepTaskItems | paginate: { id: 'server', itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalItems }">
+            <td><mat-checkbox (change)="selectTaskItemCheckbox($event.checked, item)"></mat-checkbox></td>
+            <td>{{item.taskItem.name}}</td>
+            <td>{{item.sortId}}</td>
+            <td>{{item.procedureStep.name}}</td>
+            <!--{{item.procedureStepDto.name}}-->
+          </tr>
+        </table>
+      </div>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>构件情况列表</ng-template>
+      <div class="table-responsive">
+        <table class="table table-hover clear-margin">
+          <thead>
+          <tr>
+            <th>构件颜色：</th>
+            <th colspan="6">
+              <span class="label bg-purple">待分台座</span>
+              <span class="label bg-blue">待分派任务</span>
+              <span class="label bg-orange">处理中</span>
+              <span class="label bg-green">完成</span>
+            </th>
+            <!--<th>-->
+            <!--<span class="label {{colorConsts.idlingClass}}">空闲</span>-->
+            <!--<span class="label {{colorConsts.occupyingClass}}">占用</span>-->
+            <!--</th>-->
+            <!--<th>构件颜色：</th>-->
+            <!--<th colspan="3">-->
+            <!--<span class="label {{colorConsts.waitWorkshopClass}}">待分台座</span>-->
+            <!--<span class="label {{colorConsts.waitAssignmentClass}}">待分派任务</span>-->
+            <!--<span class="label {{colorConsts.inProcessingClass}}">处理中</span>-->
+            <!--<span class="label {{colorConsts.inCompletingClass}}">完成</span>-->
+            <!--</th>-->
+          </tr>
+          <tr>
+            <th>梁片编号</th>
+            <th>状态</th>
+            <th>预计完成时间</th>
+            <th>进度</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let subProject of subProjects | paginate: { id: 'server', itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalItems }"
+              class="clickable-item">
+            <td>{{subProject.code}}</td>
+            <td><span class="label" [ngClass]="subProject.bgClass">{{subProject.stageCode}}</span></td>
+            <td>{{subProject.estimatedFinishedTime | date}}</td>
+            <td>
+              <mat-progress-bar mode="determinate" [value]="subProject.progress"
+                                style="height: 10px"></mat-progress-bar>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+        <div class="sys-ngx-pagination" *ngIf="totalItems > pageSize">
+          <pagination-controls (pageChange)="getDataPage($event)" id="server" nextLabel="下一页"
+                               previousLabel="上一页"></pagination-controls>
+        </div>
+      </div>
+      <!--<button mat-button matStepperPrevious>Back</button>-->
+      <!--<button mat-raised-button color="primary" (click)="stepper.reset()" class="pull-right">再来一次</button>-->
+    </mat-step>
+  </mat-vertical-stepper>
+  <app-button-group>
+    <button mat-fab color="primary" class="pull-right" (click)="assignTask()"
+            [disabled]="selections.length < 1 || !pedestalSelection">
+      <mat-icon>forward</mat-icon>
+    </button>
+  </app-button-group>
+</div>
+

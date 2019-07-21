@@ -1,0 +1,67 @@
+<div bsModal #editModal="bs-modal" class="modal fade" (onShown)="onShown()" tabindex="-1" role="dialog"
+     aria-labelledby="editProcedureStepModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+
+    <div class="modal-content">
+      <form *ngIf="model" #editForm="ngForm" id="frm_edit_procedureStep" novalidate (ngSubmit)="save()">
+        <div class="modal-header">
+          <button type="button" class="close" (click)="close()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">
+            <span>{{l("创建一道新工序")}}</span>
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div class="row clearfix">
+            <div class="col-sm-12">
+              <mat-form-field appearance="standard">
+                <mat-label>本道工序名称</mat-label>
+                <input matInput type="text" name="ProcedureStepName" [(ngModel)]="model.name" required
+                       maxlength="32" placeholder="请输入本道工序名称">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12">
+              <mat-form-field appearance="standard">
+                <mat-label>优先级</mat-label>
+                <input matInput type="text" name="priority" [(ngModel)]="model.priority" required
+                       maxlength="32" placeholder="请输入优先级">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12">
+              <mat-form-field appearance="standard">
+                <mat-label>所需天数</mat-label>
+                <input matInput type="number" name="duration" [(ngModel)]="model.duration" required
+                       maxlength="32" placeholder="请输入所需天数">
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="row clearfix" *ngIf="!isCreating">
+            <div class="col-sm-12">
+              <mat-form-field appearance="standard">
+                <mat-label>搜索工作项</mat-label>
+                <input matInput type="text" name="SearchKey" #searchBox
+                       (input)="searchTaskItems(searchBox.value)" placeholder="请输入搜索工作项">
+              </mat-form-field>
+            </div>
+            <div class="col-sm-12 m-t-5 m-b-5">
+              <mat-chip-list>
+                <mat-chip (click)="unBindTaskItem(b)" *ngFor="let b of bindings" color="primary"
+                          selected>{{b.taskItem.name}}</mat-chip>
+              </mat-chip-list>
+            </div>
+            <div class="col-sm-12 m-t-5 m-b-5">
+              <mat-chip-list>
+                <mat-chip (click)="bindTaskItem(b)" *ngFor="let b of unBindings">{{b.name}}</mat-chip>
+              </mat-chip-list>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button mat-button [disabled]="saving" type="button" (click)="close()">{{l("取消")}}</button>
+          <button mat-button color="primary" [disabled]="!editForm.form.valid || saving" type="submit">{{l("保存")}}</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

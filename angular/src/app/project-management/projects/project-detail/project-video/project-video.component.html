@@ -1,0 +1,11 @@
+<mat-card class="video-card">
+  <video controls [src]="getFileUrl()">
+    你的浏览器太老了，暂时不支持video标签
+  </video>
+</mat-card>
+<app-button-group>
+  <input type="file" name="homeVideo" style="display: none" #fileInput (input)="uploadVideo($event)">
+  <button mat-fab color="primary" type="button" (click)="fileInput.click()">
+    <mat-icon>add</mat-icon>
+  </button>
+</app-button-group>

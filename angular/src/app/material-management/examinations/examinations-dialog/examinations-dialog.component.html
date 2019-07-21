@@ -1,0 +1,74 @@
+<h1 mat-dialog-title>
+  <ng-container *ngIf="data.examinationId">送检信息修改</ng-container>
+  <ng-container *ngIf="!data.examinationId">添加送检信息</ng-container>
+</h1>
+<form #examForm="ngForm" (ngSubmit)="save()" *ngIf="examination">
+  <mat-dialog-content>
+    <ng-container *ngIf="data.inventory">
+      <mat-form-field appearance="standard">
+        <mat-label>存库编号</mat-label>
+        <input matInput placeholder="存库编号" [(ngModel)]="data.inventory.id" name="inventoryId" disabled>
+      </mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label>批次</mat-label>
+        <input matInput placeholder="批次" [(ngModel)]="data.inventory.batchNum" name="batchNum" disabled>
+      </mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label>需要检验量</mat-label>
+        <input matInput placeholder="已检验量" [(ngModel)]="data.inventory.sampleTotal" name="sampleTotal" disabled>
+      </mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label>已检验量</mat-label>
+        <input matInput placeholder="已检验量" [(ngModel)]="data.inventory.checkedSample" name="checkedSample" disabled>
+      </mat-form-field>
+      <mat-form-field appearance="standard">
+        <mat-label>单位</mat-label>
+        <input matInput placeholder="单位" [(ngModel)]="data.inventory.provider.unit" name="unit" disabled>
+      </mat-form-field>
+    </ng-container>
+    <!--可填入信息-->
+    <mat-form-field appearance="standard">
+      <mat-label>搜索并选择用户</mat-label>
+      <input matInput type="text" placeholder="搜索并选择用户" [matAutocomplete]="auto" [formControl]="searchControl">
+      <mat-hint align="start"></mat-hint>
+      <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="searchControl.setValue('')" *ngIf="!data.examinationId">
+        <mat-icon>close</mat-icon>
+      </button>
+      <mat-autocomplete #auto="matAutocomplete" (optionSelected)="examination.userId=$event.option.value.id;searchControl.setValue($event.option.value.name)">
+        <mat-option *ngFor="let option of options | async" [value]="option">
+          <div style="display: flex;align-items: center">
+            <app-user-head-viewer [user]="option" size="small"></app-user-head-viewer>
+            <span>{{option.name}}</span>
+          </div>
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+    <mat-form-field appearance="standard">
+      <mat-label>送检量</mat-label>
+      <input matInput placeholder="请输入送检量" [(ngModel)]="examination.sampleAmount" name="sampleAmount" required>
+    </mat-form-field>
+    <!--上传部分-->
+    <ng-container *ngIf="!data.inventory">
+      <mat-form-field appearance="standard">
+        <mat-label>报告编号</mat-label>
+        <input matInput placeholder="请输入报告编号" [(ngModel)]="examination.code" name="code" required>
+      </mat-form-field>
+      <!--上传文件-->
+      <input type="file" name="homeVideo" style="display: none" #fileInput (input)="uploadReport($event)">
+      <button mat-stroked-button type="button" (click)="fileInput.click()">
+        <mat-icon>add</mat-icon> 添加报告
+      </button>
+      <span *ngIf="fileInput.value" class="m-l-15">{{fileInput.files[0].name}}</span>
+      <span *ngIf="!fileInput.value" class="m-l-15">还未添加文件</span>
+    </ng-container>
+    <mat-form-field appearance="standard">
+      <mat-label>描述</mat-label>
+      <input matInput placeholder="请输入描述" [(ngModel)]="examination.description" name="description">
+    </mat-form-field>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end">
+    <button type="button" mat-button mat-dialog-close>取消</button>
+    <button type="submit" mat-button color="primary" [disabled]="examForm.invalid || !examination.userId">确定</button>
+  </mat-dialog-actions>
+</form>
+

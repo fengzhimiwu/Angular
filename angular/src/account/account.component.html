@@ -1,0 +1,17 @@
+﻿<div id="particles-js"></div>
+<div class="login-box clearfix">
+  <mat-card class="mobile-login-card">
+    <!--<div class="logo">-->
+    <!--<a style="font-size: 24px; color: #000">生产管理系统</a>-->
+    <!--</div>-->
+    <div *ngIf="showTenantChange()" class="tenant-change-box">
+      <tenant-change></tenant-change>
+    </div>
+
+    <router-outlet></router-outlet>
+  </mat-card>
+  <div class="col-xs-12 text-center p-t-15 p-b-15">
+    <small>&copy; {{currentYear}} 生产管理系统. <b>版本 </b> {{versionText}}</small>
+  </div>
+
+</div>

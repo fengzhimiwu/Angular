@@ -1,0 +1,150 @@
+﻿<div bsModal #createUserModal="bs-modal" class="modal fade" (onShown)="onShown()" tabindex="-1" role="dialog"
+    aria-labelledby="createUserModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+    <div class="modal-dialog">
+
+        <div #modalContent class="modal-content">
+
+            <form *ngIf="active" #createUserForm="ngForm" id="frm_create_user" novalidate (ngSubmit)="save()">
+                <div class="modal-header">
+                    <button type="button" class="close" (click)="close()" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title">
+                        <span>{{l("新增用户")}}</span>
+                    </h4>
+                </div>
+                <div class="modal-body">
+
+                    <ul class="nav nav-tabs tab-nav-right" role="tablist">
+                        <li role="presentation" class="active"><a href="#user-details" data-toggle="tab">用户信息</a></li>
+                        <li role="presentation"><a href="#user-roles" data-toggle="tab">用户角色</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div role="tabpanel" class="tab-pane animated fadeIn active" id="user-details">
+
+                            <div class="row clearfix" style="margin-top:10px;">
+                                <div class="col-sm-12">
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>用户名（登陆名）</mat-label>
+                                        <input matInput placeholder="请输入用户名（登陆名）" type="text" name="UserName"
+                                            [(ngModel)]="user.userName" required maxlength="32" minlength="2"
+                                            autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>姓名</mat-label>
+                                        <input matInput placeholder="请输入姓名" type="text" name="Name"
+                                            [(ngModel)]="user.name" required maxlength="32" minlength="2"
+                                            autocomplete="off">
+                                    </mat-form-field>
+                                </div>
+                                <!--<div class="col-sm-6">-->
+                                <!--<div class="form-group form-float">-->
+                                <!--<div class="form-line">-->
+                                <!--<input id="surname" type="text" name="Surname" [(ngModel)]="user.surname" required maxlength="32" class="validate form-control">-->
+                                <!--<label for="surname" class="form-label">{{l("称谓")}}</label>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                                <!--</div>-->
+                            </div>
+
+                            <!--<div class="row clearfix">-->
+                            <!--<div class="col-sm-12">-->
+                            <!--<div class="form-group form-float">-->
+                            <!--<div class="form-line">-->
+                            <!--<input id="email" type="email" name="EmailAddress" [(ngModel)]="user.emailAddress" maxlength="256" pattern="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$" class="validate form-control">-->
+                            <!--<label for="email" class="form-label">{{l("Email")}}</label>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>手机号</mat-label>
+                                        <input matInput placeholder="请输入手机号" type="number" name="moblieNumber"
+                                            [(ngModel)]="user.mobileNumber" required maxlength="11" minlength="11"
+                                             autocomplete="off">
+                                    </mat-form-field>
+                                    <!-- <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input id="mobileNumber" type="number" name="mobileNumber"
+                                                [(ngModel)]="user.mobileNumber" maxlength="11" minlength="11"
+                                                class="validate form-control">
+                                            <label for="mobileNumber" class="form-label">{{l("手机号")}}</label>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>密码</mat-label>
+                                        <input matInput placeholder="请输入密码(6-32位长度)" type="password" name="password"
+                                        [(ngModel)]="user.password" required maxlength="32" minlength="6" >
+                                    </mat-form-field>
+                                    <!-- <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input id="password" type="password" name="Password"
+                                                [(ngModel)]="user.password" required maxlength="32"
+                                                class="validate form-control">
+                                            <label for="password" class="form-label">{{l("密码")}}</label>
+                                        </div>
+                                    </div> -->
+                                </div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <mat-form-field appearance="standard">
+                                        <mat-label>确认密码</mat-label>
+                                        <input matInput placeholder="请确认密码" type="password" name="ConfirmPassword"
+                                            [formControl]="confirmedPasswordControl" required maxlength="32" minlength="2" autocomplete="off">
+                                            <!-- confirmedPasswordControl.errors?.confirmedPasswordControl -->
+                                        <mat-error *ngIf="true">
+                                            本名字已在表格中被使用过</mat-error>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <div class="row clearfix">
+                                <div class="col-sm-12">
+                                    <mat-checkbox name="IsActive" [(ngModel)]="user.isActive" checked>激活</mat-checkbox>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div role="tabpanel" class="tab-pane animated fadeIn" id="user-roles">
+                            <div class="row">
+                                <div class="col-sm-12 ">
+                                    <ng-template ngFor let-role [ngForOf]="roles" let-roleIndex="index">
+                                        <div class="col-sm-6">
+                                            <input type="checkbox" name="role" value="{{role.normalizedName}}"
+                                                title="{{role.description}}" class="filled-in" id="role-{{roleIndex}}"
+                                                checked="checked" />
+                                            <label for="role-{{roleIndex}}"
+                                                title="{{role.displayName}}">{{role.name}}</label>
+                                        </div>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button mat-button [disabled]="saving" type="button" (click)="close()">
+                        {{l("取消")}}
+                    </button>
+                    <button mat-button color="primary" [disabled]="!createUserForm.form.valid || saving" type="submit">
+                        {{l("保存")}}
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

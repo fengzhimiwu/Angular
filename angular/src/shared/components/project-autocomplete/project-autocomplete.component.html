@@ -1,0 +1,17 @@
+<mat-form-field appearance="standard">
+  <mat-label>选择项目</mat-label>
+  <input matInput type="text" placeholder="选择项目" [matAutocomplete]="auto" required
+         [formControl]="searchProjectControl">
+  <mat-hint align="start"></mat-hint>
+  <!--只有选中项目后，才会对结果进行筛选-->
+  <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="clearBox()">
+    <mat-icon>close</mat-icon>
+  </button>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="optionSelected($event.option)">
+    <mat-optgroup *ngFor="let group of projectGroup" [label]="group.name">
+      <mat-option *ngFor="let option of group.projects" [value]="option">
+        {{option.name}}
+      </mat-option>
+    </mat-optgroup>
+  </mat-autocomplete>
+</mat-form-field>

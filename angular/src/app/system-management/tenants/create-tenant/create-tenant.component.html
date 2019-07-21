@@ -1,0 +1,80 @@
+﻿<div bsModal #createTenantModal="bs-modal" class="modal fade" (onShown)="onShown()" tabindex="-1" role="dialog"
+     aria-labelledby="createUserModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+
+    <div #modalContent class="modal-content">
+
+      <form *ngIf="active" #createTenantForm="ngForm" id="frm_create_tenant" novalidate (ngSubmit)="save()">
+
+        <div class="modal-header">
+          <button type="button" class="close" (click)="close()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">
+            <span>{{l("新增租户")}}</span>
+          </h4>
+        </div>
+
+        <div class="modal-body">
+          <div class="form-group form-float">
+            <div class="form-line">
+              <input class="form-control" type="text" name="TenancyName" [(ngModel)]="tenant.tenancyName" required
+                     maxlength="64" minlength="2">
+              <label class="form-label">{{l("租户用户名")}}</label>
+            </div>
+          </div>
+          <div class="form-group form-float">
+            <div class="form-line">
+              <input type="text" name="Name" class="form-control" [(ngModel)]="tenant.name" required maxlength="128">
+              <label class="form-label">{{l("租户名称")}}</label>
+            </div>
+          </div>
+          <!--<div class="form-group form-float">-->
+            <!--<div class="form-line">-->
+              <!--<input type="text" name="ConnectionString" class="form-control" [(ngModel)]="tenant.connectionString"-->
+                     <!--maxlength="1024">-->
+              <!--<label class="form-label">{{l("DatabaseConnectionString")}} ({{l("Optional")}})</label>-->
+            <!--</div>-->
+          <!--</div>-->
+          <div class="form-group">
+            <mat-form-field appearance="standard">
+              <mat-label>使用版本（无法更改，谨慎选择）</mat-label>
+              <mat-select placeholder="使用版本（无法更改，谨慎选择）" [(value)]="tenant.editionName" required>
+                <mat-option [value]="edition.name" *ngFor="let edition of editions">{{edition.displayName}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <!--<div class="form-group form-float">-->
+            <!--<div class="form-line">-->
+              <!--<input type="email" name="AdminEmailAddress" class="form-control" [(ngModel)]="tenant.adminEmailAddress"-->
+                     <!--required maxlength="256" pattern="^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$">-->
+              <!--<label class="form-label">{{l("管理员Email")}}</label>-->
+            <!--</div>-->
+          <!--</div>-->
+          <div class="form-group form-float">
+            <div class="form-line">
+              <input id="mobileNumber" type="number" name="mobileNumber" [(ngModel)]="tenant.mobileNumber" maxlength="32" class="form-control" required>
+              <label for="mobileNumber" class="form-label">{{l("管理员手机号")}}</label>
+            </div>
+          </div>
+
+          <div class="form-group form-float">
+            <div class="">
+              <input id="isactive" type="checkbox" name="IsActive" [(ngModel)]="tenant.isActive" checked
+                     class="form-control"/>
+              <label for="isactive" class="form-label">{{l("激活")}}</label>
+            </div>
+          </div>
+          <p>{{l("缺省密码", "123qwe")}}</p>
+        </div>
+
+        <div class="modal-footer">
+          <button mat-button [disabled]="saving" type="button" (click)="close()">{{l("取消")}}</button>
+          <button mat-button color="primary" [disabled]="!createTenantForm.form.valid || saving || !tenant.editionName" type="submit">{{l("保存")}}</button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+</div>

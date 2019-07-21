@@ -1,0 +1,62 @@
+﻿<aside id="rightsidebar" class="right-sidebar"
+       [@toolbarAnimation]="!stateChanger.states['isToolbarHidden'] ? 'asideHidden' : 'asideVisible'">
+  <mat-tab-group mat-stretch-tabs style="height: 100%;">
+    <mat-tab label="First">
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">question_answer</mat-icon>
+      </ng-template>
+      <!-- 加载动画 -->
+      <div style="height: 192px;align-items: center;justify-content: center;display: flex;" *ngIf="!recentMessages"
+           [@fadeIn]>
+        <mat-spinner diameter="50"></mat-spinner>
+      </div>
+      <ul class="chat-box">
+        <!-- 各种提示 -->
+        <li class="chatlist" *ngIf="!isConnected" (click)="reloadPage()"><a>
+          <mat-icon class="m-r-10">cloud_off</mat-icon>与聊天服务器断开...点击刷新
+        </a></li>
+        <li class="chatlist" *ngIf="recentMessages && recentMessages.length < 1"><a>
+          <mat-icon class="m-r-10">mood</mat-icon>没有最近聊天消息...
+        </a></li>
+        <!-- 最近聊天的列表 -->
+        <li class="chatlist" *ngFor="let rm of recentMessages" (click)="modal.show(rm.receiverUser)" matRipple><a>
+          <div class="list__left">
+            <app-user-head-viewer size="middle-small" [user]="rm.receiverUser" matBadge="{{rm.numMessagesUnRead}}"
+                                  matBadgeColor="warn" [matBadgeHidden]="!rm.numMessagesUnRead"></app-user-head-viewer>
+          </div>
+          <div class="list__content">
+            <div class="title">{{ rm.receiverUser.name }}
+              <small>{{ rm.lastMessageTime | date: 'HH:mm' }}</small>
+            </div>
+            <div class="sub-title">{{ rm.lastMessageContent }}
+                <mat-icon class="delete-icon" (click)="delete(rm);$event.stopPropagation();">highlight_off</mat-icon>
+            </div>
+          </div>
+        </a></li>
+      </ul>
+    </mat-tab>
+    <mat-tab label="Second">
+      <ng-template mat-tab-label>
+        <mat-icon class="example-tab-icon">people</mat-icon>
+      </ng-template>
+      <ul class="chat-box">
+        <!-- 各种提示 -->
+        <li class="chatlist" *ngIf="!isConnected" (click)="reloadPage()"><a>
+          <mat-icon class="m-r-10">cloud_off</mat-icon>与聊天服务器断开...点击刷新
+        </a></li>
+        <li class="chatlist" *ngIf="users && users.length < 1"><a>
+          <mat-icon class="m-r-10">work_off</mat-icon>此项目中没有添加任何人员，或未选择项目...
+        </a></li>
+        <!-- 项目人员 -->
+        <li class="chatlist" *ngFor="let u of users" (click)="modal.show(u)" matRipple><a>
+          <div class="list__left"><app-user-head-viewer size="middle-small" [user]="u"></app-user-head-viewer></div>
+          <div class="list__content">
+            <div class="title">{{ u.name }}</div>
+            <div class="sub-title">{{ u.roleNames }}</div>
+          </div>
+        </a></li>
+      </ul>
+    </mat-tab>
+  </mat-tab-group>
+</aside>
+<app-chat-box #modal (onClosed)="refresh()"></app-chat-box>

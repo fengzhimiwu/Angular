@@ -1,0 +1,12 @@
+<mat-nav-list>
+  <a mat-list-item (click)="openCamera()">
+    <span mat-line>打开照相机</span>
+    <span mat-line>点击打开照相机进行拍照</span>
+  </a>
+  <a mat-list-item (click)="fileInputBox.click()">
+    <input placeholder="{{data.formName}}" name="value{{data.formName}}" type="file" #fileInputBox
+           (change)="changeFile($event)" style="display: none">
+    <span mat-line>从本地选择图片</span>
+    <span mat-line>也可以从本地文件中选择图片</span>
+  </a>
+</mat-nav-list>

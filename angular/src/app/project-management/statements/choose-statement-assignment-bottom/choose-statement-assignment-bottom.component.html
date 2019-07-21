@@ -1,0 +1,15 @@
+<mat-nav-list>
+  <ng-container *ngIf="assignmentsOb | async as assignments;else loading">
+    <a mat-list-item *ngIf="assignments.length == 0">
+      <span mat-line>该模板所绑定的任务还未完成</span>
+    </a>
+    <a mat-list-item (click)="data.isDownloadMode ? download(a) : openOnlineOffice(a)" *ngFor="let a of assignments">
+      <span mat-line>{{a.taskItem.name}}</span>
+      <span mat-line>执行人：{{a.user.name}}
+        <ng-container *ngIf="a.lastModificationTime">{{a.lastModificationTime | date}}</ng-container>
+        <ng-container *ngIf="!a.lastModificationTime"><span style="color:red">未完成</span></ng-container>
+      </span>
+    </a>
+  </ng-container>
+  <ng-template #loading></ng-template>
+</mat-nav-list>

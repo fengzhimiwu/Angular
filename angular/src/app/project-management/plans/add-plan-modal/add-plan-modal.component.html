@@ -1,0 +1,54 @@
+<div bsModal #modal="bs-modal" class="modal fade" tabindex="-1" role="dialog"
+     aria-labelledby="createProjectModal" aria-hidden="true" [config]="{backdrop: 'static'}">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form id="frm_create_project" (ngSubmit)="save()">
+        <div class="modal-header">
+          <button type="button" class="close" (click)="close()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h4 class="modal-title">
+            <span>{{l("添加新的构件/子项目")}}</span>
+          </h4>
+        </div>
+        <div class="modal-body">
+          <div class="row clearfix">
+            <div class="col-sm-12">
+              <app-project-autocomplete (onOptionSelected)="subProject.projectId=$event ? $event.id : null"></app-project-autocomplete>
+            </div>
+            <div class="col-sm-12">
+              <app-procedure-autocomplete (onOptionSelected)="subProject.procedureId=$event ? $event.id : null"></app-procedure-autocomplete>
+            </div>
+            <div class="col-sm-12">
+              <app-setting-selector key="构件类别" [(value)]="subProject.category" [required]="true"></app-setting-selector>
+            </div>
+            <div class="col-sm-12">
+              <mat-form-field appearance="standard">
+                <mat-label>梁片数</mat-label>
+                <input matInput type="number" placeholder="梁片数" required [(ngModel)]="subProject.numCreating"
+                       name="numCreating">
+                <mat-hint>输入要添加的梁片数量</mat-hint>
+              </mat-form-field>            </div>
+            <div class="col-sm-12">
+              <mat-form-field appearance="standard">
+                <mat-label>梁片起始编号（整数）</mat-label>
+                <input matInput type="number" maxlength="4" placeholder="梁片起始编号（整数）" required [(ngModel)]="subProject.startNum"
+                       name="startNum">
+                <mat-hint>当一个项目多次生成批次时，后一次编号要与之前的连续</mat-hint>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button [disabled]="saving" type="button" mat-button (click)="close()">
+            {{l("取消")}}
+          </button>
+          <button [disabled]="!(subProject.projectId && subProject.procedureId && subProject.numCreating && subProject.category) || saving"
+                  type="submit" mat-button color="primary">
+            {{l("保存")}}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

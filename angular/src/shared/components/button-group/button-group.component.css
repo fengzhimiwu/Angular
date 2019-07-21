@@ -1,0 +1,23 @@
+.button-group-fixed {
+  position: fixed;
+  bottom: 32px;;
+  right: 32px;
+  z-index: 9;
+}
+.button-group-fixed > button {
+  margin-bottom: 4px;
+}
+
+@media (max-width: 767px) {
+  .button-group-fixed {
+    bottom: 16px;;
+    right: 16px;
+  }
+}
+.button-group-content {
+  display: flex;
+  flex-direction: column;
+}
+::ng-deep .button-group-content > button {
+  margin-top: 16px;
+}

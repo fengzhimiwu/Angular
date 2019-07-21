@@ -1,0 +1,80 @@
+<form class="form-container" #submittedForm="ngForm">
+  <!--右侧-->
+  <div class="row" *ngFor="let item of formItems" [ngSwitch]="item.type">
+    <!--勾选框-->
+    <div class="col-xs-12" *ngSwitchCase="TaskInputControlType.checkbox">
+      <mat-checkbox (change)="checkboxValChange($event, item)" [checked]="!!item.value" [disabled]="readonly">
+        {{item.name}}
+      </mat-checkbox>
+      <small class="m-l-15">{{item.hint?'提示: '+item.hint:''}}</small>
+    </div>
+    <!--数值-->
+    <div class="col-sm-4" *ngSwitchCase="TaskInputControlType.number">
+      <mat-form-field appearance="outline">
+        <mat-label>测量误差</mat-label>
+        <input matInput placeholder="测量误差" [(ngModel)]="item.allowedError" name="allowedError{{item.name}}"
+               [disabled]="true">
+      </mat-form-field>
+    </div>
+    <div class="col-sm-8" *ngSwitchCase="TaskInputControlType.number">
+      <mat-form-field appearance="outline">
+        <mat-label>{{item.name}}(数据量: {{item.expectedValNum?item.expectedValNum:'无限制'}})</mat-label>
+        <mat-chip-list #chipList [disabled]="readonly">
+          <mat-chip *ngFor="let v of item.numberVal" (removed)="removeValNum(v, item)" [removable]="!readonly">
+            {{v}} <mat-icon matChipRemove>cancel</mat-icon>
+          </mat-chip>
+          <input placeholder="{{item.name}}" required [disabled]="readonly" ngModel name="value{{item.name}}"
+                 (blur)="checkValNum(item)"
+                 [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                 (matChipInputTokenEnd)="addValNum($event, item)">
+        </mat-chip-list>
+        <mat-hint align="start">{{item.hint}}</mat-hint>
+      </mat-form-field>
+    </div>
+    <!--文字-->
+    <div class="col-xs-12" *ngSwitchCase="TaskInputControlType.label">
+      <mat-form-field appearance="outline">
+        <mat-label>{{item.name}}</mat-label>
+        <input matInput placeholder="请输入{{item.name}}" [(ngModel)]="item.value" name="value{{item.name}}"
+               required [disabled]="readonly">
+        <mat-hint align="start">{{item.hint}}</mat-hint>
+      </mat-form-field>
+    </div>
+    <!--选择器-->
+    <div class="col-xs-12" *ngSwitchCase="TaskInputControlType.selection">
+      <mat-form-field appearance="outline">
+        <mat-label>{{item.name}}</mat-label>
+        <input matInput placeholder="请输入{{item.name}}" name="value{{item.name}}" [(ngModel)]="item.value" required
+               [disabled]="readonly" [matAutocomplete]="auto" (input)="dataSourceHelper.doSearch(item.value, item.name)">
+        <mat-hint align="start">{{item.hint}}</mat-hint>
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option [value]="so" *ngFor="let so of (dataSourceHelper.searchObservables[item.name] | async)">{{so}}</mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+    <!--图片上传-->
+    <div class="col-xs-12" *ngSwitchCase="TaskInputControlType.picture">
+      <ng-container *ngIf="!readonly">
+<!--        <input placeholder="{{item.name}}" name="value{{item.name}}" type="file" #fileInputBox-->
+<!--               (change)="changeFile($event, item)" required style="display: none">-->
+        <button mat-stroked-button matTooltip="添加图片" type="button" (click)="clickAddImageButton(item)"
+                style="margin-bottom: 8px;"><mat-icon>add_photo_alternate</mat-icon>添加图片
+        </button>
+<!--        <span *ngIf="fileInputBox.value" class="m-l-15">{{fileInputBox.files[0].name}}</span>-->
+        <span *ngIf="!item.value" class="m-l-15">还未添加文件</span>
+        <small>{{item.hint}}</small>
+      </ng-container>
+      <app-file-viewer [id]="item.value"></app-file-viewer>
+    </div>
+  </div>
+  <!--这里的button只管form页面的操作，所以如果只读就不显示-->
+  <app-button-group *ngIf="!readonly">
+    <button mat-fab color="default" type="button" (click)="openForwardDialog()" matTooltip="转发"
+            [disabled]="submittedForm.invalid">
+      <mat-icon>forward</mat-icon>
+    </button>
+    <button mat-fab color="primary" type="button" (click)="save()" matTooltip="提交" [disabled]="submittedForm.invalid">
+      <mat-icon>check</mat-icon>
+    </button>
+  </app-button-group>
+</form>

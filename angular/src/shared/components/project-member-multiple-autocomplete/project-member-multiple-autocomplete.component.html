@@ -1,0 +1,22 @@
+<mat-form-field appearance="standard" class="example-chip-list">
+  <mat-label>搜索并选择合作用户</mat-label>
+  <mat-chip-list #chipList>
+    <mat-chip *ngFor="let user of users" [selectable]="true" [removable]="true" (removed)="remove(user.id)">
+      {{user.name}}
+      <mat-icon matChipRemove>cancel</mat-icon>
+    </mat-chip>
+    <input placeholder="项目人员" #fruitInput [formControl]="searchCtrl" [matAutocomplete]="auto"
+           [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+           [matChipInputAddOnBlur]="true">
+  </mat-chip-list>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event, fruitInput)">
+    <mat-option *ngFor="let option of options | async" [value]="option">
+      <!--{{option.name}}-->
+      <div style="display: flex;align-items: center">
+        <app-user-head-viewer [user]="option" size="small"></app-user-head-viewer>
+        <span>{{option.name}}</span><!-- |
+        <small>{{option.roleNames}}</small>-->
+      </div>
+    </mat-option>
+  </mat-autocomplete>
+</mat-form-field>

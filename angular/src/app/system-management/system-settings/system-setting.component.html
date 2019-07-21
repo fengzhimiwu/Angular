@@ -1,0 +1,57 @@
+<div class="row" [@routerTransition]>
+  <app-sub-toolbar searchTip="搜索值" (searchStart)="search($event)" [isSearching]="isTableLoading"> <!-- (searchStart)=""-->
+    <h4> {{l('参数管理')}} <i class="fa fa-spin fa-spinner" *ngIf="isTableLoading"></i></h4>
+    <div>
+      <button mat-icon-button color="default" appToolbarSearch>
+        <mat-icon aria-label="搜索" matTooltip="搜索值">search</mat-icon>
+      </button>
+      <button mat-icon-button color="default">
+        <mat-icon aria-label="刷新" matTooltip="刷新" (click)="refresh()">refresh</mat-icon>
+      </button>
+    </div>
+  </app-sub-toolbar>
+  <mat-card>
+    <div class="row">
+      <div class="col-sm-6">
+          <mat-form-field appearance="standard">
+            <mat-label>参数类别</mat-label>
+            <mat-select placeholder="请选择参数类别" (selectionChange)="selectionChange($event.value)">
+              <mat-option *ngFor="let item of settings" [value]="item">
+                {{item}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+      </div>
+    </div>
+  </mat-card>
+  <div class="table-responsive">
+    <table class="table table-hover clear-margin">
+      <thead>
+      <tr>
+        <th>值</th>
+        <th>备注</th>
+        <th>操作</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngIf="!values || values.length < 1">
+        <td colspan="3" *ngIf="!values">请选择类别后再进行操作</td>
+        <td colspan="3" *ngIf="values && values.length < 1">没有参数请添加参数</td>
+      </tr>
+      <tr *ngFor="let item of values">
+        <td>{{item.value}}</td>
+        <td>{{item.description}}</td>
+        <td>
+          <button mat-icon-button (click)="openSettingDialog(item)"><mat-icon>edit</mat-icon></button>
+          <button mat-icon-button (click)="delete(item)" color="warn"><mat-icon>delete</mat-icon></button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <app-button-group>
+    <button mat-fab color="primary" type="button" [disabled]="!currentKey" (click)="openSettingDialog()">
+      <mat-icon>add</mat-icon>
+    </button>
+  </app-button-group>
+</div>

@@ -1,0 +1,19 @@
+<mat-form-field appearance="standard">
+  <mat-label>搜索并选择用户</mat-label>
+  <input matInput type="text" placeholder="搜索并选择用户" [matAutocomplete]="auto" required
+         [formControl]="searchControl">
+  <mat-hint align="start"></mat-hint>
+  <!--只有选中项目后，才会对结果进行筛选-->
+  <button type="button" mat-button matSuffix mat-icon-button aria-label="Clear" (click)="searchControl.setValue('')">
+    <mat-icon>close</mat-icon>
+  </button>
+  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="optionSelected($event.option)">
+      <mat-option *ngFor="let option of options | async" [value]="option">
+        <div style="display: flex;align-items: center">
+          <app-user-head-viewer [user]="option" size="small"></app-user-head-viewer>
+          <span>{{option.name}}</span><!-- |
+        <small>{{option.roleNames}}</small>-->
+        </div>
+      </mat-option>
+  </mat-autocomplete>
+</mat-form-field>
