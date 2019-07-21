@@ -1,0 +1,16 @@
+{
+  "/api": {
+    "target": "http://localhost:21021",
+    "secure": "false",
+    "pathRewrite": {
+      "^/api": ""
+    }
+  },
+  "/api/signalr": {
+    "target": "http://localhost:21021/signalr",
+    "secure": "false",
+    "pathRewrite": {
+      "^/api": ""
+    }
+  }
+}
